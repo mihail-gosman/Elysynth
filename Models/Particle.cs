@@ -1,84 +1,68 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Remoting.Messaging;
-using System.Text;
-using System.Threading.Tasks;
-
+using System.Numerics;
 namespace Models
 {
     public class Particle
     {
-        string name;
-        double mass;
-        double charge;
-        double xPos;
-        double yPos;
-        double xVel;
-        double yVel;
-        double xAcc;
-        double yAcc;
+        private double mass;
+        private double charge;
+        private Vector2 position;
+        private Vector2 velocity;
+        private Vector2 acceleration;
+        private string name;
+       
 
         public Particle()
         {
-
         }
 
-        public Particle(double mass, double charge, double xPos, double yPos, double xVel, double yVel, double xAcc, double yAcc, string name)
+        public Particle(double mass, double charge, Vector2 position, Vector2 velocity, Vector2 acceleration, string name)
         {
             this.mass = mass;
             this.charge = charge;
-            this.xPos = xPos;
-            this.yPos = yPos;
-            this.xVel = xVel;
-            this.yVel = yVel;
-            this.xAcc = xAcc;
-            this.yAcc = yAcc;
+            this.position = position;
+            this.velocity = velocity;
+            this.acceleration = acceleration;
             this.name = name;
         }
 
-        public void SetPosition(double xPos, double yPos)
+        public void SetPosition(Vector2 position)
         {
-            this.xPos = xPos;
-            this.yPos = yPos;
+            this.position = position;
         }
 
-        public void setVelocity(double xVel, double yVel)
+        public void SetVelocity(Vector2 velocity)
         {
-            this.xVel = xVel;
-            this.yVel = yVel;
+            this.velocity = velocity;
         }
 
-        public void SetAcceleration(double xAcc, double yAcc)
+        public void SetAcceleration(Vector2 acceleration)
         {
-            this.xAcc = xAcc;
-            this.yAcc = yAcc;
+            this.acceleration = acceleration;
         }
 
-        public void setMass(double mass)
+        public void SetMass(double mass)
         {
             this.mass = mass;
         }
 
-        public void setCharge(double charge)
+        public void SetCharge(double charge)
         {
             this.charge = charge;
         }
 
-        public double[] GetPosition()
+        public Vector2 GetPosition()
         {
-            double[] position = { xPos, yPos };
             return position;
         }
 
-        public double[] GetVelocity()
+        public Vector2 GetVelocity()
         {
-            double[] velocity = { xVel, yVel };
             return velocity;
         }
-        public double[] GetAcceleration()
+
+        public Vector2 GetAcceleration()
         {
-            double[] acceleration = { xAcc, yAcc };
             return acceleration;
         }
 
@@ -92,31 +76,24 @@ namespace Models
             return mass;
         }
 
-
         public void Update(double deltaTime)
         {
-            // Update the x position using the kinematic equation: x = x0 + v0 * t + 0.5 * a * t^2
-            xPos += xVel * deltaTime + 0.5 * xAcc * Math.Pow(deltaTime, 2);
-
-            // Update the y position using the kinematic equation: y = y0 + v0 * t + 0.5 * a * t^2
-            yPos += yVel * deltaTime + 0.5 * yAcc * Math.Pow(deltaTime, 2);
+            // Update the position using the kinematic equation: x = x0 + v0 * t + 0.5 * a * t^2
+            position += velocity * (float)deltaTime + 0.5f * acceleration * (float)Math.Pow(deltaTime, 2);
         }
 
-        public void ApplyForce(double forceX, double forceY)
+        public void ApplyForce(Vector2 force)
         {
             // Calculate the acceleration from the applied force using Newton's second law: F = m * a => a = F / m
-            double accX = forceX / mass;
-            double accY = forceY / mass;
+            Vector2 acc = force / (float)mass;
 
             // Update the particle's acceleration
-            xAcc += accX;
-            yAcc += accY;
+            acceleration += acc;
         }
 
         public override string ToString()
         {
-            return "Particle: mass=" + mass + ", charge=" + charge + ", xPos=" + xPos + ", yPos=" + yPos + ", xVel=" + xVel + ", yVel=" + yVel + ", xAcc=" + xAcc + ", yAcc=" + yAcc;
+            return $"Particle: mass={mass}, charge={charge}, position={position}, velocity={velocity}, acceleration={acceleration}";
         }
-
-    } 
+    }
 }

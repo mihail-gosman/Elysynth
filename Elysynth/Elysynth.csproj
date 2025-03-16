@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{679C0222-D481-4887-805C-066421CFAE4A}</ProjectGuid>
+    <ProjectGuid>{720F521F-4B7C-42EE-B6E6-50D9C3FB639D}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>Elysynth</RootNamespace>
     <AssemblyName>Elysynth</AssemblyName>
@@ -35,6 +35,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Numerics" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -48,6 +49,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\EngineSystem\EngineSystem.csproj">
+      <Project>{9cb06ef7-5761-4aa0-80a7-e3de44b1fe15}</Project>
+      <Name>EngineSystem</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Models\Models.csproj">
+      <Project>{f2ece4c7-e382-447a-bae5-ab31ebdb22e6}</Project>
+      <Name>Models</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
