@@ -9,43 +9,57 @@ namespace EngineSystem
 {
     public class Engine
     {
-        List<Particle> particles = new List<Particle>();
+        private List<Particle> particles = new List<Particle>();
 
-        double deltaTime { get; set; }
-        bool isRunning { get; set; }
+        public double DeltaTime { get; set; }
+        public bool IsRunning { get; private set; }
 
-        public Engine()
+        public Engine() { }
+
+        public void SetDeltaTime(double deltaTime)
         {
+            DeltaTime = deltaTime;
         }
 
-        public void SetDeltaTime(double deltaTime) { this.deltaTime = deltaTime; }
+        public double GetDeltaTime()
+        {
+            return DeltaTime;
+        }
 
-        public double GetDeltaTime() { return deltaTime; }
+        public void Start()
+        {
+            IsRunning = true;
+        }
 
-        public void Start() { isRunning = true; }
-
-        public void Stop() { isRunning = false; }
+        public void Stop()
+        {
+            IsRunning = false;
+        }
 
         public void AddParticle(Particle particle)
         {
             particles.Add(particle);
         }
+        public void RemoveParticle(Particle particle)
+        {
+            particles.Remove(particle);
+        }
 
-        public List<Particle> GetParticles() {  return particles; }
+        public List<Particle> GetParticles()
+        {
+            return particles;
+        }
 
+        // Updates the particles in the engine
         public void Update()
         {
-            if (isRunning)
+            if (IsRunning)
             {
                 foreach (var particle in particles)
                 {
-                    particle.Update(deltaTime);
+                    particle.Update(DeltaTime);
                 }
             }
         }
-
-
     }
-
-
 }
