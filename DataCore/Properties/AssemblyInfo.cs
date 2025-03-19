@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("EngineSystem")]
+[assembly: AssemblyTitle("DataCore")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("EngineSystem")]
+[assembly: AssemblyProduct("DataCore")]
 [assembly: AssemblyCopyright("Copyright ©  2025")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("9cb06ef7-5761-4aa0-80a7-e3de44b1fe15")]
+[assembly: Guid("a317b3f7-76bb-4d54-aa7e-08c05dcf9da1")]
 
 // Version information for an assembly consists of the following four values:
 //
