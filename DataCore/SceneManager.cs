@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System.Xml.Serialization;
+using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 using Models;
 
 namespace DataCore
@@ -8,60 +9,84 @@ namespace DataCore
     public class SceneManager
     {
         string Path { get; set; }
-        List<Scene> Scenes { get; set; }
-        Scene ActiveScene { get; set; }
-        List<string> ScenesNames { get; set; } = new List<string>();
+        private readonly string _absolutePath;
+
+        public List<Scene> Scenes { get; set; }
 
         public SceneManager(string path)
         {
             Path = path;
+            _absolutePath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
             Scenes = new List<Scene>();
         }
 
-        public  Scene NewScene(string name)
+        public Scene NewScene(string name)
         {
             Scene scene = new Scene();
+            scene.Particles = new List<Particle>();
             scene.Name = name;
-            ActiveScene = scene;
+            Scenes.Add(scene);
             return scene;
         }
 
-        public void LoadScenesNames()
+        public void SaveScenes()
         {
-            string[] files = Directory.GetFiles(Path);
-            foreach (string file in files)
+            BinaryFormatter formatter = new BinaryFormatter();
+            foreach (Scene scene in Scenes)
             {
-                Scene scene = new Scene();
-                XmlSerializer serializer = new XmlSerializer(typeof(Scene));
-
-
-                using (FileStream fs = new FileStream(file, FileMode.Open))
+                using (FileStream stream = new FileStream(_absolutePath + "\\" + Path + "\\" + scene.Name + ".scene", FileMode.Create))
                 {
-                    scene = (Scene)serializer.Deserialize(fs);
-                    ScenesNames.Add(scene.Name);
+                    formatter.Serialize(stream, scene);
                 }
-                
             }
-                
+
         }
 
-        public void LoadScene(string name)
+        public void LoadScenes()
         {
-            string file = Path + name + ".xml";
-            XmlSerializer serializer = new XmlSerializer(typeof(Scene));
-            using (FileStream fs = new FileStream(file, FileMode.Open))
+            Scenes.Clear();
+            BinaryFormatter formatter = new BinaryFormatter();
+            foreach (string file in Directory.GetFiles(_absolutePath + "\\" + Path + "\\", "*.scene"))
             {
-                ActiveScene = (Scene)serializer.Deserialize(fs);
+                using (FileStream stream = new FileStream(file, FileMode.Open))
+                {
+                    Scene scene = (Scene)formatter.Deserialize(stream);
+                    Scenes.Add(scene);
+                }
             }
         }
 
-        public void SaveScene()
+        public void DeleteScene(string name)
         {
-            string file = Path + ActiveScene.Name + ".xml";
-            XmlSerializer serializer = new XmlSerializer(typeof(Scene));
-            using (FileStream fs = new FileStream(file, FileMode.Create))
+            Scene scene = Scenes.Find(s => s.Name == name);
+            if (scene != null)
             {
-                serializer.Serialize(fs, ActiveScene);
+                Scenes.Remove(scene);
+                File.Delete(_absolutePath + "\\" + Path + "\\" + name + ".scene");
+            }
+        }
+
+        public Scene LoadScene(string sceneName)
+        {
+            Scene scene = Scenes.Find(s => s.Name == sceneName);
+            return scene;
+        }
+
+        public void AddParticle(string sceneName, Particle particle)
+        {
+            Scene scene = Scenes.Find(s => s.Name == sceneName);
+            if (scene != null)
+            {
+                scene.Particles.Add(particle);
+            }
+        }
+
+        public void RemoveParticle(string sceneName, int id)
+        {
+            Scene scene = Scenes.Find(s => s.Name == sceneName);
+            if (scene != null)
+            {
+                scene.Particles.Remove(scene.Particles.First(p => p.Id == id));
             }
         }
     }

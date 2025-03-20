@@ -1,9 +1,12 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 
 namespace Models
 {
+    [Serializable]
     public class Particle
     {
+        public int Id { get; set; }
         public Vector2 Position { get; set; }
         public Vector2 Velocity { get; set; }
         public Vector2 Acceleration { get; set; }
@@ -13,7 +16,7 @@ namespace Models
 
         public override string ToString()
         {
-            return $"Position: {Position}, Velocity: {Velocity}, Acceleration: {Acceleration}, Mass: {Mass}, Charge: {Charge}";
+            return $"Id: {Id}, Position: {Position}, Velocity: {Velocity}, Acceleration: {Acceleration}, Mass: {Mass}, Charge: {Charge}";
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using System.IO;
-using System.Xml.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 using Models;
 
 namespace DataCore
@@ -17,19 +17,22 @@ namespace DataCore
 
         public void LoadSettings()
         {
-            XmlSerializer serializer = new XmlSerializer(typeof(Settings));
-            using (FileStream fs = new FileStream(Path, FileMode.Open))
+            if (File.Exists(Path))
             {
-                Settings = (Settings)serializer.Deserialize(fs);
+                BinaryFormatter formatter = new BinaryFormatter();
+                using (FileStream stream = new FileStream(Path, FileMode.Open))
+                {
+                    Settings = (Settings)formatter.Deserialize(stream);
+                }
             }
         }
 
         public void SaveSettings()
         {
-            XmlSerializer serializer = new XmlSerializer(typeof(Settings));
-            using (FileStream fs = new FileStream(Path, FileMode.Create))
+            BinaryFormatter formatter = new BinaryFormatter();
+            using (FileStream stream = new FileStream(Path, FileMode.Create))
             {
-                serializer.Serialize(fs, Settings);
+                formatter.Serialize(stream, Settings);
             }
         }
 
