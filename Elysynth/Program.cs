@@ -10,6 +10,10 @@ using Models;
 using System.IO;
 using DataCore;
 using System.Data;
+using System.Runtime.Remoting.Lifetime;
+using System.Runtime;
+using System.Data.SqlClient;
+using System.Runtime.Hosting;
 
 namespace Elysynth
 {
@@ -34,7 +38,7 @@ namespace Elysynth
         static void Main(string[] args)
         {
             Initialise();
-           
+
             if (args.Length > 0)
             {
                 ;
@@ -64,34 +68,25 @@ namespace Elysynth
                 {
                     case Command.exit:
                         Exit();
-                        return;
                         break;
-
+                    
                     case Command.load:
-                        Load(arguments);
-                        break;
-
-                    case Command.save:
-                        Save(arguments);
+                        Load(arguments); 
                         break;
 
                     case Command.show:
                         Show(arguments);
                         break;
 
-                    case Command.create:
-                        Create(arguments);
-                        break;
-
                     case Command.delete:
                         Delete(arguments);
                         break;
 
-                    case Command.unknown:
-                        Console.WriteLine("Unknown command, for help type: help");
+                    case Command.create:
+                        Create(arguments);
                         break;
-
                 }
+                
             }
         }
 
@@ -104,135 +99,118 @@ namespace Elysynth
             sceneManager.LoadScenes();
             activeScene = null;
         }
-
-        private static Command ParseCommand(string command) 
+        
+        private static Command ParseCommand(string command)
         {
-            if(Enum.TryParse(command, out Command result))
+            command = command.ToLower();
+            if (Enum.TryParse(command, out Command result))
             {
                 return result;
             }
+
             return Command.unknown;
+
         }
 
         private static void Load(string[] arguments)
         {
             if (arguments.Length == 0)
             {
-                Console.WriteLine("Please provide a scene name to load");
+                Console.WriteLine("Please provide what to load (scenes / scene / settings)");
                 return;
             }
-
-            else
+            else if (arguments.Length == 1)
             {
-                if (arguments[0] == "scenes")
-                {
-                    sceneManager.LoadScenes();
-                    Console.WriteLine("Scenes loaded");
-                    return;
-                }
-                else if (arguments[0] == "settings")
+                if (arguments[0] == "settings")
                 {
                     settingsManager.LoadSettings();
-                    Console.WriteLine("Settings loaded");
-                    return;
                 }
-                else if (arguments[0] == "scene")
+                else if (arguments[0] == "scenes")
                 {
-                    if (arguments.Length == 1)
-                    {
-                        Console.WriteLine("Please provide a scene name to load");
-                        return;
-                    }
-                    else
-                    {
-                        activeScene = sceneManager.Scenes.Find(s => s.Name == arguments[1]);
-                        Console.WriteLine($"Scene {activeScene.Name} loaded");
-                        return;
-                    }
+                    sceneManager.LoadScenes();
                 }
             }
-        }
-
-        private static void Save(string[] arguments)
-        {
-            if (arguments.Length == 0)
+            else if (arguments.Length == 2 && arguments[0] == "scene")
             {
-                ;
-            }
-            else if(arguments[0] == "scenes")
-            {
-                sceneManager.SaveScenes();
-                sceneManager.LoadScenes();
-                Console.WriteLine("Scenes saved");
-                return;
-            }
-            else if (arguments[0] == "settings")
-            {
-                settingsManager.SaveSettings();
-                Console.WriteLine("Settings saved");
-                return;
-            }
-            else
-            {
-                Console.WriteLine("Unknown command, for help type: help");
-                return;
+                activeScene = sceneManager.Scenes.FirstOrDefault(s => s.Name == arguments[1]);
             }
         }
 
         private static void Show(string[] arguments)
         {
-            if (arguments[0] == "scenes")
+            if (arguments.Length == 0)
             {
-                foreach(Scene scene in sceneManager.Scenes)
+                Console.WriteLine("Please provide what to show (scenes / settings)");
+                return;
+            }
+            else if (arguments.Length == 1)
+            {
+                if (arguments[0] == "settings")
                 {
-                    Console.WriteLine($"{scene.Name}");
+                    Console.WriteLine(settingsManager.Settings);
+                }
+                else if (arguments[0] == "scenes")
+                {
+                    foreach (Scene scene in sceneManager.Scenes)
+                    {
+                        Console.WriteLine(scene.Name);
+                    }
                 }
             }
-            else if (arguments[0] == "settings")
+            else if (arguments.Length == 2 && arguments[0] == "scene")
             {
-                Console.WriteLine(settingsManager.Settings.ToString());
+                Scene scene = sceneManager.Scenes.FirstOrDefault(s => s.Name == arguments[1]);
+                if (scene != null)
+                {
+                    Console.WriteLine(scene);
+                }
+            }
+        }
+
+        private static void  Delete(string[] arguments)
+        {
+            if (arguments.Length == 0)
+            {
+                Console.WriteLine("Please provide what to delete (scene)");
+                return;
+            }
+            else if (arguments.Length == 1 && arguments[0] == "scene")
+            {
+                Console.WriteLine("Please provide the name of the scene to delete");
+                return;
+            }
+            else if (arguments.Length == 2 && arguments[0] == "scene")
+            {
+                sceneManager.DeleteScene(arguments[1]);
+                sceneManager.SaveScenes();
+                sceneManager.LoadScenes();
             }
         }
 
         private static void Create(string[] arguments)
         {
-            string name;
-
             if (arguments.Length == 0)
             {
-                Console.Write("Provide a name for the scene: ");
-                name = Console.ReadLine();
+                Console.WriteLine("Please provide what to create (scene)");
+                return;
             }
-            else
+            else if (arguments.Length == 1 && arguments[0] == "scene")
             {
-                name = arguments[0];
+                Console.WriteLine("Please provide the name of the scene to create");
+                return;
             }
-            activeScene = null;
-            activeScene = new Scene();
-            activeScene.Name = name;   
-        }
-
-        private static void Delete(string[] arguments)
-        {
-            if (string.IsNullOrEmpty(arguments[0]))
+            else if (arguments.Length == 2 && arguments[0] == "scene")
             {
-                ; // De completat
-            }
-            else if (!string.IsNullOrEmpty(arguments[0]))
-            {
-                if (arguments[0] == "scene")
-                {
-                    sceneManager.DeleteScene(arguments[1]);
-                    activeScene = null;
-                    sceneManager.SaveScenes();
-                    sceneManager.LoadScenes();
-                }
+                activeScene = sceneManager.NewScene(arguments[1]);
+                sceneManager.SaveScenes();
+                sceneManager.LoadScenes();
             }
         }
 
         private static void Exit()
         {
             Console.WriteLine("Exiting...");
+            Environment.Exit(0);
         }
     }
 }

@@ -7,3 +7,5 @@
 /.vs
 /DataCore/bin
 /DataCore/obj
+/Core/bin
+/Core/obj
