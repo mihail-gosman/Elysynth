@@ -5,12 +5,12 @@ using System.Runtime.Serialization.Formatters.Binary;
 using Models;
 
 
-namespace Core.Configuration
+namespace Configuration
 {
     public class SceneManager
     {
-        private string ScenesFolderName = "Scenes";
-        private string FullPath { get; set; }
+        private string _scenesFolderName = "Scenes";
+        private string _fullPath { get; set; }
         public List<Scene> Scenes { get; private set; }
 
         public SceneManager()
@@ -19,7 +19,7 @@ namespace Core.Configuration
         }
 
         public void LoadScenes()         {
-            string folderPath = Path.Combine(FullPath, ScenesFolderName);
+            string folderPath = Path.Combine(_fullPath, _scenesFolderName);
 
             if (Directory.Exists(folderPath))
             {
@@ -39,7 +39,7 @@ namespace Core.Configuration
 
         public void SaveScenes()
         {
-            string folderPath = Path.Combine(FullPath, ScenesFolderName);
+            string folderPath = Path.Combine(_fullPath, _scenesFolderName);
 
             if (!Directory.Exists(folderPath))
             {
@@ -69,20 +69,29 @@ namespace Core.Configuration
         public void RemoveScene(Scene scene) // Changed to non-static
         {
             Scenes.Remove(scene);
-            string folderPath = Path.Combine(FullPath, ScenesFolderName);
+            string folderPath = Path.Combine(_fullPath, _scenesFolderName);
             string filePath = Path.Combine(folderPath, scene.Name + ".bin");
             File.Delete(filePath);
+        }
+
+        public void RenameScene(Scene scene, string newName) // Changed to non-static
+        {
+            string folderPath = Path.Combine(_fullPath, _scenesFolderName);
+            string oldFilePath = Path.Combine(folderPath, scene.Name + ".bin");
+            string newFilePath = Path.Combine(folderPath, newName + ".bin");
+            File.Move(oldFilePath, newFilePath);
+            scene.Name = newName;
         }
 
         public void SetPath(string path) // Changed to non-static
         {
             if (string.IsNullOrEmpty(path))
             {
-                FullPath = AppDomain.CurrentDomain.BaseDirectory;
+                _fullPath = AppDomain.CurrentDomain.BaseDirectory;
             }
             else
             {
-                FullPath = path;
+                _fullPath = path;
             }
         }
     }

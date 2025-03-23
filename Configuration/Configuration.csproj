@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{F6981797-A268-4BCF-983E-1205D335A7E3}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>Elysynth</RootNamespace>
-    <AssemblyName>Elysynth</AssemblyName>
+    <ProjectGuid>{8439DC10-5A19-454C-8358-D76E2CA77A56}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Configuration</RootNamespace>
+    <AssemblyName>Configuration</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -32,6 +32,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -43,17 +46,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SceneManager.cs" />
+    <Compile Include="SettingsManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Configuration\Configuration.csproj">
-      <Project>{8439dc10-5a19-454c-8358-d76e2ca77a56}</Project>
-      <Name>Configuration</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Core\Core.csproj">
       <Project>{e8486df4-9c31-416b-b5a3-4e96f742b43b}</Project>
       <Name>Core</Name>

@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2E6DB702-3217-486A-B836-5659465BA3F8}</ProjectGuid>
+    <ProjectGuid>{F7C04077-330C-409B-9589-2551E8A85AC9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Models</RootNamespace>
@@ -43,10 +43,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Field.cs" />
-    <Compile Include="Settings.cs" />
-    <Compile Include="Scene.cs" />
     <Compile Include="Particle.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Scene.cs" />
+    <Compile Include="Settings.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
