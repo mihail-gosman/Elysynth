@@ -1,16 +1,15 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
+
 namespace Models
 {
     [Serializable]
     public class Settings
     {
-        public string Name { get; set; }
-        public string Version { get; set; }
-        public string ScenesPath { get; set; }
+        public string FilePath { get; set; }
+        public string AppName { get; set; } = "Elysync";
+        public string AppVersion { get; set; } = "0.1";
 
-        public override string ToString()
-        {
-            return $"Name: {Name}, Version: {Version}";
-        }
+        public string ProjectsDirectoryPath { get; set; }
     }
 }

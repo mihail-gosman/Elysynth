@@ -1,61 +1,57 @@
 ﻿using System;
 using System.IO;
 
-namespace Core.Logging
+namespace Core
 {
-    public class Logger
+    public sealed class Logger
     {
-        private static readonly Lazy<Logger> _instance = new Lazy<Logger>(() => new Logger());
-        private readonly string _logFilePath;
-
+        private static Logger _instance;
+        private static readonly object _lock = new object();
+        private readonly string _logFilePath; 
+        
         public enum LogLevel
         {
             Info,
             Warning,
-            Error
+            Error,
         };
-
-        public static Logger Instance => _instance.Value;
-
-        private Logger()
+        
+        private Logger() 
         {
             string logDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Logs");
             if (!Directory.Exists(logDirectory))
             {
                 Directory.CreateDirectory(logDirectory);
             }
-
             _logFilePath = Path.Combine(logDirectory, "log.txt");
+        }
+
+        public static Logger Instance
+        {
+            get
+            {
+                lock (_lock)
+                {
+                    if (_instance == null)
+                    {
+                        _instance = new Logger();
+                    }
+                    return _instance;
+                }
+            }
         }
 
         public void Log(string message, LogLevel level = LogLevel.Info)
         {
-            string logMessage = $"{DateTime.Now:yyyy:MM:dd HH:mm:ss} [{level}] {message}";
+            string logMessage = $"{DateTime.Now} [{level}] {message}";
             WriteToFile(logMessage);
         }
 
         private void WriteToFile(string message)
         {
-            try
+            using (StreamWriter writer = new StreamWriter(_logFilePath, true)) // Always append mode
             {
-                if (!File.Exists(_logFilePath))
-                {
-                    using (StreamWriter writer = File.CreateText(_logFilePath))
-                    {
-                        writer.WriteLine(message);
-                    }
-                }
-                else
-                {
-                    using (StreamWriter writer = new StreamWriter(_logFilePath, true))
-                    {
-                        writer.WriteLine(message);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Failed to write to log file: {ex.Message}");
+                writer.WriteLine(message);
             }
         }
     }
