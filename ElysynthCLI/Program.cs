@@ -5,6 +5,7 @@ using System.ComponentModel.Design;
 using Models;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Runtime.Hosting;
 namespace ElysynthCLI
 {
     class Program
@@ -16,9 +17,11 @@ namespace ElysynthCLI
         enum Command
         {
             exit,
+            list_projects,
             new_project,
             save_project,
-
+            delete_project,
+            load_project,
             unknown,
             none
         }
@@ -54,6 +57,18 @@ namespace ElysynthCLI
 
                     case Command.save_project:
                         SaveProject(arguments);
+                        break;
+
+                    case Command.delete_project:
+                        DeleteProject(arguments);
+                        break;
+
+                    case Command.load_project:
+                        LoadProject(arguments);
+                        break;
+
+                    case Command.list_projects:
+                        ListProjects(arguments);
                         break;
 
                     case Command.unknown:
@@ -98,8 +113,30 @@ namespace ElysynthCLI
 
         static private void SaveProject(string[] arguments)
         {
-            string lol = "";
-            projectHandler.SaveProject(lol, ActiveProject);
+            if (arguments.Length == 0)
+                projectHandler.SaveProject(null, ActiveProject);
+            else
+                projectHandler.SaveProject(arguments[0], ActiveProject);
+        }
+
+        static private void DeleteProject(string[] arguments)
+        {
+            projectHandler.DeleteProjectByName(arguments[0]);
+            if (arguments[0] == ActiveProject.Name)
+            {
+                ActiveProject = new Project();
+            }
+        }
+
+        static private void LoadProject(string[] arguments)
+        {
+            ActiveProject = projectHandler.LoadProjectByName(arguments[0]);
+        }
+
+        static private void ListProjects(string[] arguments)
+        {
+            string[] names;
+            names = projectHandler.ListProjects(null);
         }
     }
 }

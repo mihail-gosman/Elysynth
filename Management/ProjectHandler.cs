@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using Models;
 
 namespace Management
@@ -12,6 +13,33 @@ namespace Management
         {
            return Directory.GetFiles (_directoryPath, "*");
         }
+
+        public string[] ListProjects(string path)
+        {
+            if (path == null)
+            {
+                string[] filePaths = Directory.GetFiles(_directoryPath);
+                string[] fileNames = new string[filePaths.Length]; // Fixed size array
+
+                int index = 0;
+                foreach (string filePath in filePaths)
+                {
+                    fileNames[index] = Path.GetFileName(filePath);  // Store file name at current index
+                    index++;
+                }
+
+                // Print the file names
+                foreach (string fileName in fileNames)
+                {
+                    Console.WriteLine(fileName);
+                }
+
+                return fileNames;
+            }
+
+            return null;
+        }
+        
 
         public Project GetProjectByName(string name)
         {
@@ -30,10 +58,22 @@ namespace Management
             {
                 filePath = Path.Combine(_directoryPath, project.Name);
             }
-
-            filePath = Path.Combine(path, project.Name);
+            else
+            {
+                filePath = Path.Combine(path, project.Name);
+            }
 
             Core.Utilities.Serializer.Instance.Write<Project>(filePath, project);
+        }
+
+        public Project LoadProjectByName(string name)
+        {
+            string filePath = Path.Combine (_directoryPath, name);
+            if (File.Exists(filePath))
+            {
+               return Core.Utilities.Serializer.Instance.Read<Project>(filePath) as Project;
+            }
+            return null;
         }
 
         public Project NewProject(string name)
@@ -41,6 +81,16 @@ namespace Management
             Project project = new Project();
             project.Name = name;
             return project;
+        }
+
+        public void DeleteProjectByName(string name)
+        {
+            string filePath = Path.Combine(_directoryPath, name + ".bin");
+
+            if (File.Exists(filePath))
+            {
+                File.Delete(filePath); 
+            }
         }
 
         public void SetPath(string path)
@@ -52,7 +102,7 @@ namespace Management
             else
             {
                 _directoryPath = path;
-            }
+            } 
         }
     }
 }
