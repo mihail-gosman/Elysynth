@@ -6,12 +6,15 @@ using Models;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Runtime.Hosting;
+using System.Xml.Linq;
+
 namespace ElysynthCLI
 {
     class Program
     {
         static Management.SettingsHandler settingsHandler;
         static Management.ProjectHandler projectHandler;
+        static Management.ParticleHandler particleHandler;
         static Project ActiveProject = new Project();
 
         enum Command
@@ -22,6 +25,8 @@ namespace ElysynthCLI
             save_project,
             delete_project,
             load_project,
+            add_particle,
+            remove_particle,
             unknown,
             none
         }
@@ -106,32 +111,70 @@ namespace ElysynthCLI
 
         static private void NewProject(string[] arguments)
         {
-            Project project = new Project();
-            project.Name = arguments[0];
-            ActiveProject = project;
+            if (arguments.Length == 0)
+            {
+                Console.Write("Please provide the name for the project: ");
+                string name = Console.ReadLine();
+                Project project = new Project();
+                project.Name = name;
+                ActiveProject = project;
+            }
+            else
+            {
+                Project project = new Project();
+                project.Name = arguments[0];
+                ActiveProject = project;
+            }
+            particleHandler = new Management.ParticleHandler(ActiveProject);   
         }
 
         static private void SaveProject(string[] arguments)
         {
             if (arguments.Length == 0)
+            {
                 projectHandler.SaveProject(null, ActiveProject);
+            }
             else
+            {
                 projectHandler.SaveProject(arguments[0], ActiveProject);
+            }
         }
 
         static private void DeleteProject(string[] arguments)
         {
-            projectHandler.DeleteProjectByName(arguments[0]);
-            if (arguments[0] == ActiveProject.Name)
+            if (arguments.Length != 0)
             {
-                ActiveProject = new Project();
+                projectHandler.DeleteProjectByName(arguments[0]);
+                if (arguments[0] == ActiveProject.Name)
+                {
+                    ActiveProject = null;
+                }
             }
         }
 
         static private void LoadProject(string[] arguments)
         {
-            ActiveProject = projectHandler.LoadProjectByName(arguments[0]);
+            if (arguments.Length == 0)
+            {
+                Console.Write("Please provide the name for the project: ");
+                string name = Console.ReadLine();
+
+                if (name ==  null)
+                {
+                    Console.WriteLine("Invalid name");
+                }
+                else
+                {
+                    ActiveProject = projectHandler.NewProject(name);
+                }
+            }
+            else
+            {
+                ActiveProject = projectHandler.LoadProjectByName(arguments[0]);
+            }
+            particleHandler = new ParticleHandler(ActiveProject);
         }
+
 
         static private void ListProjects(string[] arguments)
         {

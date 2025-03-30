@@ -18,13 +18,13 @@ namespace Management
         {
             if (path == null)
             {
-                string[] filePaths = Directory.GetFiles(_directoryPath);
-                string[] fileNames = new string[filePaths.Length]; // Fixed size array
+                string[] filePaths = Directory.GetFiles(_directoryPath, "*.ely");
+                string[] fileNames = new string[filePaths.Length]; 
 
                 int index = 0;
                 foreach (string filePath in filePaths)
                 {
-                    fileNames[index] = Path.GetFileName(filePath);  // Store file name at current index
+                    fileNames[index] = Path.GetFileName(filePath); 
                     index++;
                 }
 
@@ -36,14 +36,13 @@ namespace Management
 
                 return fileNames;
             }
-
             return null;
         }
         
 
         public Project GetProjectByName(string name)
         {
-            string filePath = Path.Combine(_directoryPath, name);
+            string filePath = Path.Combine(_directoryPath, name + ".ely");
             if (File.Exists(filePath))
             {
                 return Core.Utilities.Serializer.Instance.Read<Project>(filePath);
@@ -56,11 +55,11 @@ namespace Management
             string filePath;
             if (string.IsNullOrEmpty(path))
             {
-                filePath = Path.Combine(_directoryPath, project.Name);
+                filePath = Path.Combine(_directoryPath, project.Name + ".ely");
             }
             else
             {
-                filePath = Path.Combine(path, project.Name);
+                filePath = Path.Combine(path, project.Name + ".ely");
             }
 
             Core.Utilities.Serializer.Instance.Write<Project>(filePath, project);
@@ -68,7 +67,7 @@ namespace Management
 
         public Project LoadProjectByName(string name)
         {
-            string filePath = Path.Combine (_directoryPath, name);
+            string filePath = Path.Combine (_directoryPath, name + ".ely");
             if (File.Exists(filePath))
             {
                return Core.Utilities.Serializer.Instance.Read<Project>(filePath) as Project;
@@ -85,7 +84,7 @@ namespace Management
 
         public void DeleteProjectByName(string name)
         {
-            string filePath = Path.Combine(_directoryPath, name + ".bin");
+            string filePath = Path.Combine(_directoryPath, name + ".ely");
 
             if (File.Exists(filePath))
             {
@@ -104,5 +103,7 @@ namespace Management
                 _directoryPath = path;
             } 
         }
+
+        // Particles & Fields
     }
 }
