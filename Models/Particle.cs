@@ -6,6 +6,7 @@ namespace Models
     [Serializable]
     public class Particle
     {
+        public int ID { get; set; }
         public string Name { get; set; }
         public Vector2 Position { get; set; }
         public Vector2 Velocity { get; set; }
