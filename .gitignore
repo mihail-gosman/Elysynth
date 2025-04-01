@@ -16,3 +16,6 @@
 /ElysynthCLI/obj
 /Management/obj
 /Management/bin
+/ElysynthGUI/bin/Debug
+/ElysynthGUI/obj
+/Engine/bin

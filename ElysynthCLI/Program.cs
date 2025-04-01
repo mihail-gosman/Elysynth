@@ -1,12 +1,8 @@
 ﻿using Core;
 using Management;
 using System;
-using System.ComponentModel.Design;
 using Models;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Runtime.Hosting;
-using System.Xml.Linq;
 
 namespace ElysynthCLI
 {
@@ -27,6 +23,8 @@ namespace ElysynthCLI
             load_project,
             add_particle,
             remove_particle,
+            start_simulation,
+            stop_simulation,
             unknown,
             none
         }
@@ -175,6 +173,14 @@ namespace ElysynthCLI
             particleHandler = new ParticleHandler(ActiveProject);
         }
 
+        static private void StartSimulation(string[] arguments)
+        {
+            if (arguments.Length == 1)
+            {
+                Engine.Simulation simulation = new Engine.Simulation();
+
+            }
+        }
 
         static private void ListProjects(string[] arguments)
         {

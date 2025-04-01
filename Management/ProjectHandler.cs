@@ -28,11 +28,7 @@ namespace Management
                     index++;
                 }
 
-                // Print the file names
-                foreach (string fileName in fileNames)
-                {
-                    Console.WriteLine(fileName);
-                }
+                
 
                 return fileNames;
             }

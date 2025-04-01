@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Management", "Management\Ma
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElysynthCLI", "ElysynthCLI\ElysynthCLI.csproj", "{C632E569-231A-4D72-A369-B1B68BD29A2C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine", "Engine\Engine.csproj", "{42C2EB78-4414-4275-90B0-137D298A55AC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElysynthGUI", "ElysynthGUI\ElysynthGUI.csproj", "{14C83B8C-0E59-49DF-BAF1-9F9D18AC061B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +37,14 @@ Global
 		{C632E569-231A-4D72-A369-B1B68BD29A2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C632E569-231A-4D72-A369-B1B68BD29A2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C632E569-231A-4D72-A369-B1B68BD29A2C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{42C2EB78-4414-4275-90B0-137D298A55AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42C2EB78-4414-4275-90B0-137D298A55AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42C2EB78-4414-4275-90B0-137D298A55AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42C2EB78-4414-4275-90B0-137D298A55AC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14C83B8C-0E59-49DF-BAF1-9F9D18AC061B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14C83B8C-0E59-49DF-BAF1-9F9D18AC061B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14C83B8C-0E59-49DF-BAF1-9F9D18AC061B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14C83B8C-0E59-49DF-BAF1-9F9D18AC061B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
