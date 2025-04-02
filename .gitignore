@@ -12,3 +12,10 @@
 /Configuration/bin
 /Configuration/obj
 /Engine/obj
+/ElysynthCLI/bin
+/ElysynthCLI/obj
+/Management/obj
+/Management/bin
+/ElysynthGUI/bin/Debug
+/ElysynthGUI/obj
+/Engine/bin
