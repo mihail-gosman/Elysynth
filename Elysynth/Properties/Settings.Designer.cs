@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ElysynthGUI.Properties
+namespace Elysynth.Properties
 {
 
 

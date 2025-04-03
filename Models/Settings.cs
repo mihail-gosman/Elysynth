@@ -7,9 +7,8 @@ namespace Models
     public class Settings
     {
         public string FilePath { get; set; }
-        public string AppName { get; set; } = "Elysync";
+        public string AppName { get; set; } = "Elysynth";
         public string AppVersion { get; set; } = "0.1";
-
         public string ProjectsDirectoryPath { get; set; }
     }
 }

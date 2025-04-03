@@ -5,11 +5,11 @@ using Models;
 
 namespace Management
 {
-    public class ParticleHandler
+    public class ParticlesHandler
     {
         private Project _activeProject; 
         
-        public ParticleHandler(Project project)
+        public ParticlesHandler(Project project)
         {
             _activeProject = project;
         }

@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("ElysynthGUI")]
+[assembly: AssemblyTitle("Elysynth")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("ElysynthGUI")]
+[assembly: AssemblyProduct("Elysynth")]
 [assembly: AssemblyCopyright("Copyright ©  2025")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("14c83b8c-0e59-49df-baf1-9f9d18ac061b")]
+[assembly: Guid("d1f07cad-6548-4a83-ac4f-8ba62a13aec7")]
 
 // Version information for an assembly consists of the following four values:
 //

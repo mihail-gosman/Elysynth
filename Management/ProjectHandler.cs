@@ -24,7 +24,7 @@ namespace Management
                 int index = 0;
                 foreach (string filePath in filePaths)
                 {
-                    fileNames[index] = Path.GetFileName(filePath); 
+                    fileNames[index] = Path.GetFileName(filePath).Split('.')[0]; 
                     index++;
                 }
 
