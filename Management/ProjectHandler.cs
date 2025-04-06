@@ -24,7 +24,7 @@ namespace Management
                 int index = 0;
                 foreach (string filePath in filePaths)
                 {
-                    fileNames[index] = Path.GetFileName(filePath); 
+                    fileNames[index] = Path.GetFileName(filePath).Split('.')[0]; 
                     index++;
                 }
 
@@ -45,7 +45,12 @@ namespace Management
             }
             return null;
         }
-    
+        
+        public Project GetProjectByPath(string path)
+        { 
+            return Core.Utilities.Serializer.Instance.Read<Project>(path);
+        }
+
         public void SaveProject(string path, Project project)
         {
             string filePath;

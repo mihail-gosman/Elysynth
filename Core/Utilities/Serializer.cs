@@ -46,25 +46,20 @@ namespace Core.Utilities
         /// <param name="model">The object to serialize and write to the file.</param>
         public void Write<T>(string filePath, T model)
         {
-            // Get the directory path from the full file path
             string directoryPath = Path.GetDirectoryName(filePath);
 
-            // Create the directory if it doesn't exist
             if (!Directory.Exists(directoryPath))
             {
                 Directory.CreateDirectory(directoryPath);
             }
 
-            // Open the file for writing
-            using (FileStream fs = File.OpenWrite(filePath))
+            using (FileStream fs = new FileStream(filePath, FileMode.Create, FileAccess.Write))
             {
-                // Create a binary formatter for serialization
                 IFormatter formatter = new BinaryFormatter();
-
-                // Serialize the object and write it to the file stream
                 formatter.Serialize(fs, model);
             }
         }
+
 
         /// <summary>
         /// Deserializes an object from the specified file and returns the object.

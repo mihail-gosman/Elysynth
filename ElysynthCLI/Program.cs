@@ -10,7 +10,7 @@ namespace ElysynthCLI
     {
         static Management.SettingsHandler settingsHandler;
         static Management.ProjectHandler projectHandler;
-        static Management.ParticleHandler particleHandler;
+        static Management.ParticlesHandler particleHandler;
         static Project ActiveProject = new Project();
 
         enum Command
@@ -123,7 +123,7 @@ namespace ElysynthCLI
                 project.Name = arguments[0];
                 ActiveProject = project;
             }
-            particleHandler = new Management.ParticleHandler(ActiveProject);   
+            particleHandler = new Management.ParticlesHandler(ActiveProject);   
         }
 
         static private void SaveProject(string[] arguments)
@@ -170,7 +170,7 @@ namespace ElysynthCLI
             {
                 ActiveProject = projectHandler.LoadProjectByName(arguments[0]);
             }
-            particleHandler = new ParticleHandler(ActiveProject);
+            particleHandler = new ParticlesHandler(ActiveProject);
         }
 
         static private void StartSimulation(string[] arguments)
@@ -186,6 +186,13 @@ namespace ElysynthCLI
         {
             string[] names;
             names = projectHandler.ListProjects(null);
+            
+            foreach (string name in names)
+            {
+                Console.Write(name + " ");
+            }
+
+            Console.WriteLine();
         }
     }
 }

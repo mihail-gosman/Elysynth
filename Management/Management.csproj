@@ -42,7 +42,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ParticleHandler.cs" />
+    <Compile Include="FieldsHandler.cs" />
+    <Compile Include="ParticlesHandler.cs" />
     <Compile Include="ProjectHandler.cs" />
     <Compile Include="SettingsHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

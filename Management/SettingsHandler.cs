@@ -16,9 +16,10 @@ namespace Management
             ActiveSettings = new Settings();
         }
 
-        public void Load() 
+        public Settings Load() 
         {
             ActiveSettings = Core.Utilities.Serializer.Instance.Read<Settings>(_settingsFilePath);
+            return ActiveSettings; 
         }
         
         public void Save() 
@@ -35,6 +36,12 @@ namespace Management
             else
             {
                 _settingsFilePath = path;
+            }
+            
+            if (!File.Exists(_settingsFilePath))
+            {
+                Settings settings = new Settings();
+                Core.Utilities.Serializer.Instance.Write(_settingsFilePath, settings);
             }
         }
     }
