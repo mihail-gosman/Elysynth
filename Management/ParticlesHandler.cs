@@ -1,4 +1,5 @@
-﻿using System.Collections.Specialized;
+﻿using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Numerics;
 using Core;
 using Models;
@@ -12,6 +13,11 @@ namespace Management
         public ParticlesHandler(Project project)
         {
             _activeProject = project;
+            _activeProject = project;
+            if (_activeProject.Particles == null)
+            {
+                _activeProject.Particles = new List<Particle>();
+            }
         }
 
         public Particle NewParticle(Vector2 position, Vector2 velocity, Vector2 acceleration, double mass, double charge)

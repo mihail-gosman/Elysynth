@@ -7,20 +7,30 @@ using System.IO;
 
 namespace Elysynth
 {
-    public partial class Main: Form
+    public partial class Main : Form
     {
         private SettingsHandler _settingsHandler;
         private Settings _settings;
+        private ProjectHandler _projectHandler;
+        private Project _activeProject;
+        private ParticlesHandler _particlesHandler;
+        private string _activeProjectPath;
 
         public Main()
         {
             InitializeComponent();
-        
+
             _settingsHandler = new SettingsHandler();
             _settingsHandler.SetPath(null);
-            _settings  = _settingsHandler.Load();
-        
+            _settings = _settingsHandler.Load();
+
+            _projectHandler = new ProjectHandler();
+
             this.Text = $"{_settingsHandler.ActiveSettings.AppName}  {_settingsHandler.ActiveSettings.AppVersion}";
+
+            // Disable Save until a project is active
+            saveToolStripMenuItem.Enabled = false;
+            projectToolStripMenuItem.Enabled = false;
         }
 
         private void Main_Load(object sender, EventArgs e)
@@ -37,37 +47,83 @@ namespace Elysynth
                 this.Text = $"{_settingsHandler.ActiveSettings.AppName}  {_settingsHandler.ActiveSettings.AppVersion}";
                 _settingsHandler.Save();
             }
-            else if (form.DialogResult == DialogResult.Cancel)
-            {
-                // Do nothing
-            }
         }
 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (var dialog = new FolderBrowserDialog())
+            var form = new NewProject();
+
+            if (form.ShowDialog() == DialogResult.OK)
             {
-                dialog.Description = "Choose a folder to create your new project:";
+                _activeProject = new Project();
+                _activeProject.Name = form.ProjectName;
+                Core.Utilities.Serializer.Instance.Write(form.Path, _activeProject);
+                _activeProjectPath = form.Path;
 
-                if (dialog.ShowDialog() == DialogResult.OK)
+                saveToolStripMenuItem.Enabled = true;
+                this.Text = $"{_settingsHandler.ActiveSettings.AppName}  {_settingsHandler.ActiveSettings.AppVersion}  {_activeProject?.Name ?? ""}";
+            }
+            
+            particleToolStripMenuItem.Enabled = false;
+        }
+
+        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.Filter = "Project Files (*.ely)|*.ely|All Files (*.*)|*.*";
+                openFileDialog.Title = "Open Project File";
+
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    string selectedPath = dialog.SelectedPath;
+                    string filePath = openFileDialog.FileName;
 
-                    // You can prompt for a project name here (e.g., with InputBox or a custom dialog)
-                    string projectName = "NewProject"; // Replace with user input ideally
-                    string projectPath = Path.Combine(selectedPath, projectName);
+                    _activeProject = _projectHandler.GetProjectByPath(filePath);
+                    _activeProjectPath = filePath;
 
-                    if (!Directory.Exists(projectPath))
+                    if (_activeProject != null)
                     {
-                        Directory.CreateDirectory(projectPath);
-                        MessageBox.Show($"Project folder created at:\n{projectPath}", "Project Created");
+                        saveToolStripMenuItem.Enabled = true;
+                        this.Text = $"{_settingsHandler.ActiveSettings.AppName}  {_settingsHandler.ActiveSettings.AppVersion}  {_activeProject.Name}";
                     }
-                    else
-                    {
-                        MessageBox.Show("A project with this name already exists!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    }
+                }
+            }
+            projectToolStripMenuItem.Enabled = true;
+        }
 
-                    _settingsHandler.Save();
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (_activeProject != null && !string.IsNullOrEmpty(_activeProjectPath))
+            {
+                _projectHandler.SaveProject(_activeProjectPath, _activeProject);
+            }
+        }
+
+        private void particleToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var form = new AddParticle();
+            if (form.ShowDialog() == DialogResult.OK)
+            {
+                _particlesHandler = new ParticlesHandler(_activeProject);
+                MessageBox.Show(_activeProject.Name);
+                _particlesHandler.AddParticle(form.particle);
+                UpdateParticleBoxList();
+            }
+        }
+
+        private void projectToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+           
+        }
+
+        private void UpdateParticleBoxList()
+        {
+            if (_activeProject != null)
+            {
+                particleListBox.Items.Clear();
+                foreach (var particle in _activeProject.Particles)
+                {
+                    particleListBox.Items.Add(particle.Name);
                 }
             }
         }

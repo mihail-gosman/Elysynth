@@ -45,7 +45,12 @@ namespace Management
             }
             return null;
         }
-    
+        
+        public Project GetProjectByPath(string path)
+        { 
+            return Core.Utilities.Serializer.Instance.Read<Project>(path);
+        }
+
         public void SaveProject(string path, Project project)
         {
             string filePath;
