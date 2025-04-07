@@ -70,21 +70,16 @@ namespace Core.Utilities
         /// <returns>The deserialized object, or the default value of the type if an error occurs.</returns>
         public T Read<T>(string filePath)
         {
-            // Check if the file path exists
             if (File.Exists(filePath))
             {
-                // Open the file for reading
                 using (FileStream fs = File.OpenRead(filePath))
                 {
-                    // Create a binary formatter for deserialization
                     IFormatter formatter = new BinaryFormatter();
 
-                    // Deserialize the object from the file and return it
                     return (T)formatter.Deserialize(fs);
                 }
             }
 
-            // Return the default value of T if the file does not exist
             return default;
         }
     }
