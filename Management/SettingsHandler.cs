@@ -8,41 +8,32 @@ namespace Management
 {
     public class SettingsHandler
     {
-        private string _settingsFilePath;
-        public Settings ActiveSettings;
-
         public SettingsHandler()
         {
-            ActiveSettings = new Settings();
         }
 
-        public Settings Load() 
+        public Settings Load(string path)
         {
-            ActiveSettings = Core.Utilities.Serializer.Instance.Read<Settings>(_settingsFilePath);
-            return ActiveSettings; 
-        }
-        
-        public void Save() 
-        {
-            Core.Utilities.Serializer.Instance.Write(_settingsFilePath, ActiveSettings);
-        }
-
-        public void SetPath(string path) 
-        {
-            if (string.IsNullOrEmpty(path))
+            if (File.Exists(path))
             {
-                _settingsFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "settings.bin");
+                return Core.Utilities.Serializer.Instance.Read<Settings>(path);
             }
             else
             {
-                _settingsFilePath = path;
-            }
-            
-            if (!File.Exists(_settingsFilePath))
-            {
-                Settings settings = new Settings();
-                Core.Utilities.Serializer.Instance.Write(_settingsFilePath, settings);
+                return null;
             }
         }
+
+
+        public void Save(string path, Settings settings)
+        {
+            string directoryPath = Path.GetDirectoryName(path);
+            if (!Directory.Exists(directoryPath))
+            {
+                Directory.CreateDirectory(directoryPath);
+            }
+            Core.Utilities.Serializer.Instance.Write(path, settings);
+        }
+
     }
 }
