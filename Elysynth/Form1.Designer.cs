@@ -93,12 +93,14 @@
             // 
             resources.ApplyResources(this.txtLocation, "txtLocation");
             this.txtLocation.Name = "txtLocation";
+            this.txtLocation.TextChanged += new System.EventHandler(this.txtLocation_TextChanged);
             this.txtLocation.Leave += new System.EventHandler(this.txtLocation_Leave);
             // 
             // txtProjectName
             // 
             resources.ApplyResources(this.txtProjectName, "txtProjectName");
             this.txtProjectName.Name = "txtProjectName";
+            this.txtProjectName.TextChanged += new System.EventHandler(this.txtProjectName_TextChanged);
             this.txtProjectName.Leave += new System.EventHandler(this.txtProjectName_Leave);
             // 
             // lblLocation

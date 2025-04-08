@@ -12,6 +12,9 @@ namespace Elysynth
 {
     public partial class NewProjectForm : Form
     {
+        public string ProjectName;
+        public string ProjectLocation;
+
         public NewProjectForm()
         {
             InitializeComponent();
@@ -38,10 +41,11 @@ namespace Elysynth
             if (!System.IO.Directory.Exists(txtLocation.Text))
             {
                 lblInvalidLocation.Visible = true;
-
             }
             else
             {
+                ProjectName = txtProjectName.Text;
+                ProjectLocation = txtLocation.Text;
                 DialogResult = DialogResult.OK;
                 Close();
             }
@@ -90,5 +94,35 @@ namespace Elysynth
                 lblInvalidLocation.Visible = false;
             }
         }
-    }      
+
+        private void txtProjectName_TextChanged(object sender, EventArgs e)
+        {
+            if (txtProjectName.Text.Length > 0)
+            { 
+                if (char.IsLetter(txtProjectName.Text[0]))
+                {
+                    lblInvalidName.Visible = false;
+                }
+                else
+                {
+                    lblInvalidName.Visible = true;
+                }
+            }
+        }
+
+        private void txtLocation_TextChanged(object sender, EventArgs e)
+        {
+            if (txtLocation.Text.Length > 0)
+            {
+                if (char.IsLetter(txtLocation.Text[0]))
+                {
+                    lblInvalidLocation.Visible = false;
+                }
+                else
+                {
+                    lblInvalidLocation.Visible = true;
+                }
+            }
+        }
+    }
 }
