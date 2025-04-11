@@ -69,7 +69,6 @@
             this.metroLabelName.Size = new System.Drawing.Size(47, 20);
             this.metroLabelName.TabIndex = 2;
             this.metroLabelName.Text = "Name";
-            this.metroLabelName.Click += new System.EventHandler(this.metroLabelName_Click);
             // 
             // metroLabelInvalidName
             // 
@@ -82,7 +81,6 @@
             this.metroLabelInvalidName.Size = new System.Drawing.Size(87, 20);
             this.metroLabelInvalidName.TabIndex = 3;
             this.metroLabelInvalidName.Text = "Invalid name";
-            this.metroLabelInvalidName.Click += new System.EventHandler(this.metroLabelInvalidName_Click);
             // 
             // metroTextBoxName
             // 
@@ -93,7 +91,6 @@
             this.metroTextBoxName.TabIndex = 4;
             this.metroTextBoxName.Text = "NewProject";
             this.metroTextBoxName.TextChanged += new System.EventHandler(this.metroTextBoxName_TextChanged);
-            this.metroTextBoxName.Click += new System.EventHandler(this.metroTextBoxName_Click);
             // 
             // metroTextBoxLocation
             // 
@@ -102,7 +99,7 @@
             this.metroTextBoxLocation.Name = "metroTextBoxLocation";
             this.metroTextBoxLocation.Size = new System.Drawing.Size(176, 23);
             this.metroTextBoxLocation.TabIndex = 5;
-            this.metroTextBoxLocation.Click += new System.EventHandler(this.metroTextBoxLocation_Click);
+            this.metroTextBoxLocation.TextChanged += new System.EventHandler(this.metroTextBoxLocation_TextChanged);
             // 
             // metroLabelLocation
             // 
@@ -112,12 +109,10 @@
             this.metroLabelLocation.Size = new System.Drawing.Size(61, 20);
             this.metroLabelLocation.TabIndex = 6;
             this.metroLabelLocation.Text = "Location";
-            this.metroLabelLocation.Click += new System.EventHandler(this.metroLabelLocation_Click);
             // 
             // metroButtonFilesExplorer
             // 
             this.metroButtonFilesExplorer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.metroButtonFilesExplorer.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.metroButtonFilesExplorer.Location = new System.Drawing.Point(315, 141);
             this.metroButtonFilesExplorer.Name = "metroButtonFilesExplorer";
             this.metroButtonFilesExplorer.Size = new System.Drawing.Size(23, 23);
@@ -136,16 +131,13 @@
             this.metroLabelInvalidLocation.Size = new System.Drawing.Size(100, 20);
             this.metroLabelInvalidLocation.TabIndex = 8;
             this.metroLabelInvalidLocation.Text = "Invalid location";
-            this.metroLabelInvalidLocation.Click += new System.EventHandler(this.metroLabelInvalidLocation_Click);
             // 
             // NewProject
             // 
-            this.AcceptButton = this.metroButtonCreate;
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.BorderStyle = MetroFramework.Drawing.MetroBorderStyle.FixedSingle;
-            this.CancelButton = this.metroButtonCancel;
             this.ClientSize = new System.Drawing.Size(363, 252);
             this.ControlBox = false;
             this.Controls.Add(this.metroLabelInvalidLocation);
