@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Numerics;
 
 namespace Models
 {
     [Serializable]
     public class Particle
     {
-        public int ID { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public Vector2 Position { get; set; }
         public Vector2 Velocity { get; set; }

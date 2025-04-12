@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Numerics;
 
 namespace Models
 {
@@ -7,6 +6,7 @@ namespace Models
     public class Field
     {
         public int Id {  get; set; }
+        public string Name { get; set; }
         public Vector2 Position { get; set; }
         public double Charge { get; set; }
     }

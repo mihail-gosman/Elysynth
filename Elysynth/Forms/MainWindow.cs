@@ -6,6 +6,7 @@ using MetroFramework.Forms;
 using Core;
 using Models;
 using Management;
+using System.Drawing;
 
 namespace Elysynth
 {
@@ -13,8 +14,6 @@ namespace Elysynth
     {
         private SettingsHandler _settingsHandler;
         private Settings _settings;
-
-        private ProjectHandler _projectHandler;
 
 
         private string _currentProjectPath;
@@ -38,6 +37,7 @@ namespace Elysynth
         private void MainWindow_Load(object sender, EventArgs e)
         {
             metroLabelAppName.Text += " - " + _settings.AppVersion;
+            splitContainer1.Location = new Point(20, 80);
         }
 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
@@ -79,12 +79,37 @@ namespace Elysynth
             }
         }
 
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ProjectHandler.Save(_currentProjectPath, _activeProject);
+        }
+
+        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var saveFileDialog = new SaveFileDialog
+            {
+                Title = "Save Project As",
+                Filter = "Project Files (*.ely)|*.ely",
+                InitialDirectory = _currentProjectPath,
+                FileName = _activeProject?.Name + ".ely" 
+            };
+
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                
+                _currentProjectPath = saveFileDialog.FileName;
+
+                ProjectHandler.Save(_currentProjectPath, _activeProject);
+
+                UpdateMenuStrip();
+            }
+        }
 
         private void UpdateMenuStrip()
         {
             if (_activeProject != null)
             {
-                metroLabelAppName.Text = $"{_activeProject.Name} - {_settings.AppName}: {_settings.AppVersion}";
+                metroLabelAppName.Text = $"{_activeProject.Name} - {_settings.AppName}  {_settings.AppVersion}";
                 saveToolStripMenuItem.Enabled = true;
                 saveAsToolStripMenuItem.Enabled = true;
                 projectToolStripMenuItem.Enabled = true;
@@ -95,6 +120,21 @@ namespace Elysynth
                 saveAsToolStripMenuItem.Enabled = false;
                 projectToolStripMenuItem.Enabled = false;
             }
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void splitContainer2_Panel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void splitContainer1_Resize(object sender, EventArgs e)
+        {
+           
         }
     }
 }

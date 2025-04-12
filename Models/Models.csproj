@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Vector2.cs" />
     <Compile Include="Field.cs" />
     <Compile Include="Project.cs" />
     <Compile Include="Particle.cs" />
