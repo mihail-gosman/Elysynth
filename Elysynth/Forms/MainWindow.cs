@@ -34,12 +34,46 @@ namespace Elysynth
             }
         }
 
+        #region UI Updates
         private void MainWindow_Load(object sender, EventArgs e)
         {
-            metroLabelAppName.Text += " - " + _settings.AppVersion;
-            splitContainer1.Location = new Point(20, 80);
+           
         }
 
+        private void UpdateMenuStrip()
+        {
+            if (_activeProject != null)
+            {
+                metroLabelAppName.Text = $"{_activeProject.Name} - {_settings.AppName}  {_settings.AppVersion}";
+                saveToolStripMenuItem.Enabled = true;
+                saveAsToolStripMenuItem.Enabled = true;
+                projectToolStripMenuItem.Enabled = true;
+            }
+            else
+            {
+                saveToolStripMenuItem.Enabled = false;
+                saveAsToolStripMenuItem.Enabled = false;
+                projectToolStripMenuItem.Enabled = false;
+            }
+        }
+
+        private void UpdateListViewSceneElements()
+        {
+            listViewSceneElements.Items.Clear();
+            listViewSceneElements.HeaderStyle = ColumnHeaderStyle.None;
+
+            listViewSceneElements.Items.Add("");
+
+            foreach (var particle in _activeProject.Particles)
+            {
+                var item = new ListViewItem(particle.Name, 0);
+                listViewSceneElements.Items.Add(item);
+
+            }
+        }
+        #endregion
+
+        #region File Operations
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var form = new NewProject();
@@ -76,6 +110,7 @@ namespace Elysynth
                 _activeProject = ProjectHandler.Load(_currentProjectPath);
 
                 UpdateMenuStrip();
+                UpdateListViewSceneElements();
             }
         }
 
@@ -105,36 +140,18 @@ namespace Elysynth
             }
         }
 
-        private void UpdateMenuStrip()
-        {
-            if (_activeProject != null)
-            {
-                metroLabelAppName.Text = $"{_activeProject.Name} - {_settings.AppName}  {_settings.AppVersion}";
-                saveToolStripMenuItem.Enabled = true;
-                saveAsToolStripMenuItem.Enabled = true;
-                projectToolStripMenuItem.Enabled = true;
-            }
-            else
-            {
-                saveToolStripMenuItem.Enabled = false;
-                saveAsToolStripMenuItem.Enabled = false;
-                projectToolStripMenuItem.Enabled = false;
-            }
-        }
-
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Close();
         }
+        #endregion
 
-        private void splitContainer2_Panel1_Paint(object sender, PaintEventArgs e)
+        #region Project Operations
+        private void particleToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            ParticlesHandler.AddParticle(new Particle(), _activeProject.Particles);
+            UpdateListViewSceneElements();
         }
-
-        private void splitContainer1_Resize(object sender, EventArgs e)
-        {
-           
-        }
+        #endregion
     }
 }

@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.ListViewGroup listViewGroup1 = new System.Windows.Forms.ListViewGroup("Well", System.Windows.Forms.HorizontalAlignment.Left);
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -40,6 +42,7 @@
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.projectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.particleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutElysynthToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -49,6 +52,12 @@
             this.metroTile1 = new MetroFramework.Controls.MetroTile();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.splitContainer3 = new System.Windows.Forms.SplitContainer();
+            this.metroLabelSceneElements = new MetroFramework.Controls.MetroLabel();
+            this.listViewSceneElements = new System.Windows.Forms.ListView();
+            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.imageListSceneElements = new System.Windows.Forms.ImageList(this.components);
+            this.metroTabControl1 = new MetroFramework.Controls.MetroTabControl();
+            this.metroTabPageProject = new MetroFramework.Controls.MetroTabPage();
             this.menuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -58,7 +67,10 @@
             this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).BeginInit();
+            this.splitContainer3.Panel1.SuspendLayout();
+            this.splitContainer3.Panel2.SuspendLayout();
             this.splitContainer3.SuspendLayout();
+            this.metroTabControl1.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip
@@ -71,7 +83,7 @@
             this.helpToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(20, 30);
             this.menuStrip.Name = "menuStrip";
-            this.menuStrip.Size = new System.Drawing.Size(1160, 28);
+            this.menuStrip.Size = new System.Drawing.Size(1160, 30);
             this.menuStrip.TabIndex = 0;
             this.menuStrip.Text = "menuStrip";
             // 
@@ -86,7 +98,7 @@
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F)));
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(46, 24);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(46, 26);
             this.fileToolStripMenuItem.Text = "File";
             this.fileToolStripMenuItem.Click += new System.EventHandler(this.fileToolStripMenuItem_Click);
             // 
@@ -135,7 +147,7 @@
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(76, 24);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(76, 26);
             this.settingsToolStripMenuItem.Text = "Settings";
             // 
             // projectToolStripMenuItem
@@ -144,14 +156,23 @@
             this.addToolStripMenuItem});
             this.projectToolStripMenuItem.Enabled = false;
             this.projectToolStripMenuItem.Name = "projectToolStripMenuItem";
-            this.projectToolStripMenuItem.Size = new System.Drawing.Size(69, 24);
+            this.projectToolStripMenuItem.Size = new System.Drawing.Size(69, 26);
             this.projectToolStripMenuItem.Text = "Project";
             // 
             // addToolStripMenuItem
             // 
+            this.addToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.particleToolStripMenuItem});
             this.addToolStripMenuItem.Name = "addToolStripMenuItem";
             this.addToolStripMenuItem.Size = new System.Drawing.Size(120, 26);
             this.addToolStripMenuItem.Text = "Add";
+            // 
+            // particleToolStripMenuItem
+            // 
+            this.particleToolStripMenuItem.Name = "particleToolStripMenuItem";
+            this.particleToolStripMenuItem.Size = new System.Drawing.Size(140, 26);
+            this.particleToolStripMenuItem.Text = "Particle";
+            this.particleToolStripMenuItem.Click += new System.EventHandler(this.particleToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -159,7 +180,7 @@
             this.viewHelpToolStripMenuItem,
             this.aboutElysynthToolStripMenuItem});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(55, 24);
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(55, 26);
             this.helpToolStripMenuItem.Text = "Help";
             // 
             // viewHelpToolStripMenuItem
@@ -192,7 +213,7 @@
             // splitContainer1
             // 
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.Location = new System.Drawing.Point(20, 58);
+            this.splitContainer1.Location = new System.Drawing.Point(20, 60);
             this.splitContainer1.Name = "splitContainer1";
             this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -204,7 +225,7 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.splitContainer2);
-            this.splitContainer1.Size = new System.Drawing.Size(1160, 722);
+            this.splitContainer1.Size = new System.Drawing.Size(1160, 720);
             this.splitContainer1.SplitterDistance = 25;
             this.splitContainer1.TabIndex = 3;
             // 
@@ -226,19 +247,89 @@
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.splitContainer3);
-            this.splitContainer2.Size = new System.Drawing.Size(1160, 693);
-            this.splitContainer2.SplitterDistance = 940;
+            this.splitContainer2.Size = new System.Drawing.Size(1160, 691);
+            this.splitContainer2.SplitterDistance = 1001;
             this.splitContainer2.TabIndex = 0;
             // 
             // splitContainer3
             // 
+            this.splitContainer3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.splitContainer3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer3.Location = new System.Drawing.Point(0, 0);
             this.splitContainer3.Name = "splitContainer3";
             this.splitContainer3.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            this.splitContainer3.Size = new System.Drawing.Size(216, 693);
-            this.splitContainer3.SplitterDistance = 391;
+            // 
+            // splitContainer3.Panel1
+            // 
+            this.splitContainer3.Panel1.Controls.Add(this.metroLabelSceneElements);
+            this.splitContainer3.Panel1.Controls.Add(this.listViewSceneElements);
+            // 
+            // splitContainer3.Panel2
+            // 
+            this.splitContainer3.Panel2.Controls.Add(this.metroTabControl1);
+            this.splitContainer3.Size = new System.Drawing.Size(155, 691);
+            this.splitContainer3.SplitterDistance = 389;
             this.splitContainer3.TabIndex = 0;
+            // 
+            // metroLabelSceneElements
+            // 
+            this.metroLabelSceneElements.AutoSize = true;
+            this.metroLabelSceneElements.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.metroLabelSceneElements.Dock = System.Windows.Forms.DockStyle.Top;
+            this.metroLabelSceneElements.Location = new System.Drawing.Point(0, 0);
+            this.metroLabelSceneElements.Name = "metroLabelSceneElements";
+            this.metroLabelSceneElements.Size = new System.Drawing.Size(108, 20);
+            this.metroLabelSceneElements.TabIndex = 1;
+            this.metroLabelSceneElements.Text = "Scene Elements";
+            // 
+            // listViewSceneElements
+            // 
+            this.listViewSceneElements.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.listViewSceneElements.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader1});
+            this.listViewSceneElements.Dock = System.Windows.Forms.DockStyle.Fill;
+            listViewGroup1.Header = "Well";
+            listViewGroup1.Name = "listViewGroup1";
+            this.listViewSceneElements.Groups.AddRange(new System.Windows.Forms.ListViewGroup[] {
+            listViewGroup1});
+            this.listViewSceneElements.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
+            this.listViewSceneElements.HideSelection = false;
+            this.listViewSceneElements.Location = new System.Drawing.Point(0, 0);
+            this.listViewSceneElements.Name = "listViewSceneElements";
+            this.listViewSceneElements.Size = new System.Drawing.Size(153, 387);
+            this.listViewSceneElements.SmallImageList = this.imageListSceneElements;
+            this.listViewSceneElements.TabIndex = 0;
+            this.listViewSceneElements.UseCompatibleStateImageBehavior = false;
+            this.listViewSceneElements.View = System.Windows.Forms.View.List;
+            // 
+            // imageListSceneElements
+            // 
+            this.imageListSceneElements.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListSceneElements.ImageStream")));
+            this.imageListSceneElements.TransparentColor = System.Drawing.Color.Transparent;
+            this.imageListSceneElements.Images.SetKeyName(0, "particle.png");
+            // 
+            // metroTabControl1
+            // 
+            this.metroTabControl1.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
+            this.metroTabControl1.Controls.Add(this.metroTabPageProject);
+            this.metroTabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.metroTabControl1.Location = new System.Drawing.Point(0, 0);
+            this.metroTabControl1.Name = "metroTabControl1";
+            this.metroTabControl1.SelectedIndex = 0;
+            this.metroTabControl1.Size = new System.Drawing.Size(153, 296);
+            this.metroTabControl1.Style = MetroFramework.MetroColorStyle.Silver;
+            this.metroTabControl1.TabIndex = 0;
+            this.metroTabControl1.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+            // 
+            // metroTabPageProject
+            // 
+            this.metroTabPageProject.HorizontalScrollbarBarColor = true;
+            this.metroTabPageProject.Location = new System.Drawing.Point(4, 42);
+            this.metroTabPageProject.Name = "metroTabPageProject";
+            this.metroTabPageProject.Size = new System.Drawing.Size(145, 250);
+            this.metroTabPageProject.TabIndex = 0;
+            this.metroTabPageProject.Text = "Project";
+            this.metroTabPageProject.VerticalScrollbarBarColor = true;
             // 
             // MainWindow
             // 
@@ -265,8 +356,12 @@
             this.splitContainer2.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
             this.splitContainer2.ResumeLayout(false);
+            this.splitContainer3.Panel1.ResumeLayout(false);
+            this.splitContainer3.Panel1.PerformLayout();
+            this.splitContainer3.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).EndInit();
             this.splitContainer3.ResumeLayout(false);
+            this.metroTabControl1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -294,6 +389,13 @@
         private MetroFramework.Controls.MetroTile metroTile1;
         private System.Windows.Forms.SplitContainer splitContainer2;
         private System.Windows.Forms.SplitContainer splitContainer3;
+        private System.Windows.Forms.ToolStripMenuItem particleToolStripMenuItem;
+        private System.Windows.Forms.ListView listViewSceneElements;
+        private System.Windows.Forms.ColumnHeader columnHeader1;
+        private MetroFramework.Controls.MetroLabel metroLabelSceneElements;
+        private System.Windows.Forms.ImageList imageListSceneElements;
+        private MetroFramework.Controls.MetroTabControl metroTabControl1;
+        private MetroFramework.Controls.MetroTabPage metroTabPageProject;
     }
 }
 
