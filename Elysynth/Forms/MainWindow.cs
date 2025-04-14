@@ -7,6 +7,8 @@ using Core;
 using Models;
 using Management;
 using System.Drawing;
+using System.Runtime.Versioning;
+using MetroFramework.Controls;
 
 namespace Elysynth
 {
@@ -18,6 +20,8 @@ namespace Elysynth
 
         private string _currentProjectPath;
         private Project _activeProject;
+
+        private TabPage _activeElementSelectedTabPage;
 
         public MainWindow()
         {
@@ -153,5 +157,42 @@ namespace Elysynth
             UpdateListViewSceneElements();
         }
         #endregion
+
+        private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void listViewSceneElements_Click(object sender, EventArgs e)
+        {
+            if (this._activeElementSelectedTabPage != null)
+            {
+                metroTabControl1.TabPages.Remove(this._activeElementSelectedTabPage);
+            }
+
+            string selectedElementName = listViewSceneElements.SelectedItems[0].Text;
+            Particle selectedParticle = _activeProject.Particles.Find(p => p.Name == selectedElementName);
+
+            _activeElementSelectedTabPage = new TabPage("Particle");
+            
+            var lblPosX = new MetroLabel
+            {
+                Text = "Position X",
+                Location = new Point(10, 10),
+                AutoSize = true
+            };
+
+            var textPosX = new MetroTextBox
+            {
+                Location = new Point(10, 30),
+                Width = 100,
+                Text = selectedParticle.Position.X.ToString()
+            };
+
+
+            _activeElementSelectedTabPage.Controls.Add(lblPosX);
+            _activeElementSelectedTabPage.Controls.Add(textPosX);
+            metroTabControl1.TabPages.Add(_activeElementSelectedTabPage);
+        }
     }
 }
