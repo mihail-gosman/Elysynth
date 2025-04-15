@@ -160,9 +160,15 @@ namespace Elysynth
 
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            //
         }
 
+        // Next Steps:
+        // 1. Implement the `settingsToolStripMenuItem_Click` method to allow users to modify application settings.
+        // 2. Add error handling for cases where `_activeProject` or `listViewSceneElements.SelectedItems` is null in `listViewSceneElements_Click`.
+        // 3. Refactor `listViewSceneElements_Click` to dynamically handle different types of elements (e.g., Fields, Particles).
+        // 4. Add functionality to save changes made in the dynamically created tab page back to the `_activeProject` object.
+        // 5. Ensure proper disposal of dynamically created controls to avoid memory leaks.
         private void listViewSceneElements_Click(object sender, EventArgs e)
         {
             if (this._activeElementSelectedTabPage != null)
