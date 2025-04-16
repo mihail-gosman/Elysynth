@@ -87,8 +87,8 @@ namespace Elysynth
             {
                 _activeProject = new Project();
                 _activeProject.Name = form.ProjectName;
-                _currentProjectPath = form.ProjectLocation;
-
+                _currentProjectPath = Path.Combine(form.ProjectLocation, form.ProductName);
+                MessageBox.Show($"Project created at {form.ProjectLocation}", "Project Created", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 ProjectHandler.Save(_currentProjectPath, _activeProject);
 
                 UpdateMenuStrip();
@@ -180,24 +180,89 @@ namespace Elysynth
             Particle selectedParticle = _activeProject.Particles.Find(p => p.Name == selectedElementName);
 
             _activeElementSelectedTabPage = new TabPage("Particle");
-            
-            var lblPosX = new MetroLabel
+            _activeElementSelectedTabPage.BackColor = Color.White;
+
+            var lblName = new MetroLabel { Text = "Name", Location = new Point(10, 10), AutoSize = true };
+            var textName = new MetroTextBox { Location = new Point(10, 30), Width = 200, Text = selectedParticle.Name };
+
+            var lblPosX = new MetroLabel { Text = "Position X", Location = new Point(10, 60), AutoSize = true };
+            var textPosX = new MetroTextBox { Location = new Point(10, 80), Width = 100, Text = selectedParticle.Position.X.ToString() };
+
+            var lblPosY = new MetroLabel { Text = "Position Y", Location = new Point(10, 110), AutoSize = true };
+            var textPosY = new MetroTextBox { Location = new Point(10, 130), Width = 100, Text = selectedParticle.Position.Y.ToString() };
+
+            var lblVelocityX = new MetroLabel { Text = "Velocity X", Location = new Point(10, 160), AutoSize = true };
+            var textVelocityX = new MetroTextBox { Location = new Point(10, 180), Width = 100, Text = selectedParticle.Velocity.X.ToString() };
+
+            var lblVelocityY = new MetroLabel { Text = "Velocity Y", Location = new Point(10, 210), AutoSize = true };
+            var textVelocityY = new MetroTextBox { Location = new Point(10, 230), Width = 100, Text = selectedParticle.Velocity.Y.ToString() };
+
+            var lblMass = new MetroLabel { Text = "Mass", Location = new Point(10, 260), AutoSize = true };
+            var textMass = new MetroTextBox { Location = new Point(10, 280), Width = 100, Text = selectedParticle.Mass.ToString() };
+
+            var lblCharge = new MetroLabel { Text = "Charge", Location = new Point(10, 310), AutoSize = true };
+            var textCharge = new MetroTextBox { Location = new Point(10, 330), Width = 100, Text = selectedParticle.Charge.ToString() };
+
+            // Event handlers to update the particle when text changes
+            textName.TextChanged += (s, args) => selectedParticle.Name = textName.Text;
+            textPosX.TextChanged += (s, args) =>
             {
-                Text = "Position X",
-                Location = new Point(10, 10),
-                AutoSize = true
+                if (float.TryParse(textPosX.Text, out float posX))
+                {
+                    selectedParticle.Position = new Vector2(posX, selectedParticle.Position.Y);
+                }
+            };
+            textPosY.TextChanged += (s, args) =>
+            {
+                if (float.TryParse(textPosY.Text, out float posY))
+                {
+                    selectedParticle.Position = new Vector2(selectedParticle.Position.X, posY);
+                }
+            };
+            textVelocityX.TextChanged += (s, args) =>
+            {
+                if (float.TryParse(textVelocityX.Text, out float velX))
+                {
+                    selectedParticle.Velocity = new Vector2(velX, selectedParticle.Velocity.Y);
+                }
+            };
+            textVelocityY.TextChanged += (s, args) =>
+            {
+                if (float.TryParse(textVelocityY.Text, out float velY))
+                {
+                    selectedParticle.Velocity = new Vector2(selectedParticle.Velocity.X, velY);
+                }
+            };
+            textMass.TextChanged += (s, args) =>
+            {
+                if (double.TryParse(textMass.Text, out double mass))
+                {
+                    selectedParticle.Mass = mass;
+                }
+            };
+            textCharge.TextChanged += (s, args) =>
+            {
+                if (double.TryParse(textCharge.Text, out double charge))
+                {
+                    selectedParticle.Charge = charge;
+                }
             };
 
-            var textPosX = new MetroTextBox
-            {
-                Location = new Point(10, 30),
-                Width = 100,
-                Text = selectedParticle.Position.X.ToString()
-            };
-
-
+            _activeElementSelectedTabPage.Controls.Add(lblName);
+            _activeElementSelectedTabPage.Controls.Add(textName);
             _activeElementSelectedTabPage.Controls.Add(lblPosX);
             _activeElementSelectedTabPage.Controls.Add(textPosX);
+            _activeElementSelectedTabPage.Controls.Add(lblPosY);
+            _activeElementSelectedTabPage.Controls.Add(textPosY);
+            _activeElementSelectedTabPage.Controls.Add(lblVelocityX);
+            _activeElementSelectedTabPage.Controls.Add(textVelocityX);
+            _activeElementSelectedTabPage.Controls.Add(lblVelocityY);
+            _activeElementSelectedTabPage.Controls.Add(textVelocityY);
+            _activeElementSelectedTabPage.Controls.Add(lblMass);
+            _activeElementSelectedTabPage.Controls.Add(textMass);
+            _activeElementSelectedTabPage.Controls.Add(lblCharge);
+            _activeElementSelectedTabPage.Controls.Add(textCharge);
+
             metroTabControl1.TabPages.Add(_activeElementSelectedTabPage);
         }
     }

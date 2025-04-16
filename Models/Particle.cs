@@ -5,13 +5,12 @@ namespace Models
     [Serializable]
     public class Particle
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public Vector2 Position { get; set; }
-        public Vector2 Velocity { get; set; }
-        public Vector2 Acceleration { get; set; }
-        public double Mass { get; set; }
-        public double Charge { get; set; }
-
+        public int Id { get; set; } = 1;
+        public string Name { get; set; } = "1";
+        public Vector2 Position { get; set; } = new Vector2(1, 1);
+        public Vector2 Velocity { get; set; } = new Vector2(1, 1);
+        public Vector2 Acceleration { get; set; } = new Vector2(1, 1);
+        public double Mass { get; set; } = 1;
+        public double Charge { get; set; } = 1;
     }
 }
