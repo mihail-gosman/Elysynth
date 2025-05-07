@@ -12,7 +12,7 @@ namespace Management
         {
         }
 
-        public Settings Load(string path)
+        public static Settings Load(string path)
         {
             if (File.Exists(path))
             {
@@ -25,7 +25,7 @@ namespace Management
         }
 
 
-        public void Save(string path, Settings settings)
+        public static void Save(string path, Settings settings)
         {
             string directoryPath = Path.GetDirectoryName(path);
             if (!Directory.Exists(directoryPath))
