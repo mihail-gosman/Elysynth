@@ -30,12 +30,15 @@ namespace Elysynth
             InitializeComponent();
             _settings = SettingsHandler.Load(_fullPath + "settings.bin");
 
-            if (_settings != null)
+            if (_settings == null)
             {
+                _settings = new Settings();
                 _settings.AppName = "Elysynth";
                 _settings.AppVersion = "0.1";
                 SettingsHandler.Save(_fullPath + "settings.bin", _settings);
             }
+
+            lbl_elysynth.Text += "  " + _settings.AppVersion;
         }
 
         private void MainWindow_Load(object sender, EventArgs e)
@@ -112,7 +115,7 @@ namespace Elysynth
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.Close();
+            this.Close();  
         }
     }
 }
