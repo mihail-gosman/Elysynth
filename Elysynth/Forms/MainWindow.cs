@@ -43,9 +43,10 @@ namespace Elysynth
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
-        
+            UpdateTabControl();
         }
 
+        #region Menu Strip 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var newProjectWindow = new NewProjectWindow();
@@ -58,9 +59,8 @@ namespace Elysynth
                 saveAsToolStripMenuItem.Enabled = true;
                 saveToolStripMenuItem.Enabled = true;
                 projectToolStripMenuItem.Enabled = true;
+                UpdateTabControl();
             }
-
-           
         }
 
         private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -84,6 +84,7 @@ namespace Elysynth
                     saveAsToolStripMenuItem.Enabled = true;
                     saveToolStripMenuItem.Enabled = true;
                     projectToolStripMenuItem.Enabled = true;
+                    UpdateEntitiesPanel();
                 }
                 else
                 {
@@ -116,6 +117,55 @@ namespace Elysynth
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.Close();  
+        }
+
+        private void particleToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Particle particle = new Particle();
+            _activeProject.Entities.Add(particle);
+            UpdateEntitiesPanel();
+        }
+        #endregion
+
+        #region UI Updates
+        private void UpdateEntitiesPanel()
+        {
+            if (_activeProject != null)
+            {
+                splitContainer4.Panel1.Controls.Clear();
+                foreach (var entity in _activeProject.Entities)
+                {
+                    if (entity is Particle particle)
+                    {
+                        Label label = new Label();
+                        label.Text = particle.Name;
+                        label.AutoSize = true;
+
+                        label.Location = new Point(10, splitContainer4.Panel1.Controls.Count * 10);
+                        splitContainer4.Panel1.Controls.Add(label);
+
+                        /*label.Click += (s, e) =>
+                        {
+                            // Handle click event for the entity
+                            // For example, you can show entity properties in a separate panel
+                            MessageBox.Show($"Clicked on {entity.Name}");
+                        };*/
+                    }
+                }
+
+            }
+        }
+
+        private void UpdateTabControl()
+        {
+            
+        }
+
+        #endregion
+
+        private void list_entities_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
