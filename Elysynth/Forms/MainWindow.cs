@@ -16,7 +16,7 @@ using System.IO;
 
 namespace Elysynth
 {
-    public partial class MainWindow: MetroForm
+    public partial class MainWindow : MetroForm
     {
         private string _fullPath = AppDomain.CurrentDomain.BaseDirectory;
 
@@ -24,6 +24,7 @@ namespace Elysynth
         private Project _activeProject;
         private string _activeProjectPath;
 
+        private Label _selectedEntityLabel;
 
         public MainWindow()
         {
@@ -43,7 +44,7 @@ namespace Elysynth
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
-            UpdateTabControl();
+
         }
 
         #region Menu Strip 
@@ -59,7 +60,7 @@ namespace Elysynth
                 saveAsToolStripMenuItem.Enabled = true;
                 saveToolStripMenuItem.Enabled = true;
                 projectToolStripMenuItem.Enabled = true;
-                UpdateTabControl();
+                UpdateEntitiesPanel(string.Empty);
             }
         }
 
@@ -84,7 +85,7 @@ namespace Elysynth
                     saveAsToolStripMenuItem.Enabled = true;
                     saveToolStripMenuItem.Enabled = true;
                     projectToolStripMenuItem.Enabled = true;
-                    UpdateEntitiesPanel();
+                    UpdateEntitiesPanel(string.Empty);
                 }
                 else
                 {
@@ -116,56 +117,146 @@ namespace Elysynth
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.Close();  
+            this.Close();
         }
 
         private void particleToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Particle particle = new Particle();
             _activeProject.Entities.Add(particle);
-            UpdateEntitiesPanel();
+            UpdateEntitiesPanel(string.Empty);
         }
         #endregion
 
         #region UI Updates
-        private void UpdateEntitiesPanel()
+        private void UpdateEntitiesPanel(string txt_keys)
         {
+            panel_entities.Controls.Clear(); // clear current UI
+
             if (_activeProject != null)
             {
-                splitContainer4.Panel1.Controls.Clear();
+                int y = 10;
+
                 foreach (var entity in _activeProject.Entities)
                 {
-                    if (entity is Particle particle)
+                    string name = entity.GetType().GetProperty("Name")?.GetValue(entity)?.ToString();
+
+                    if (!string.IsNullOrEmpty(txt_keys) &&
+                        (string.IsNullOrEmpty(name) || !name.ToLower().Contains(txt_keys.ToLower())))
                     {
-                        Label label = new Label();
-                        label.Text = particle.Name;
-                        label.AutoSize = true;
-
-                        label.Location = new Point(10, splitContainer4.Panel1.Controls.Count * 10);
-                        splitContainer4.Panel1.Controls.Add(label);
-
-                        /*label.Click += (s, e) =>
-                        {
-                            // Handle click event for the entity
-                            // For example, you can show entity properties in a separate panel
-                            MessageBox.Show($"Clicked on {entity.Name}");
-                        };*/
+                        continue;
                     }
-                }
 
+                    Label lbl_entity = new Label()
+                    {
+                        Text = name,
+                        Location = new Point(10, y),
+                        AutoSize = true,
+                        Cursor = Cursors.Hand,
+                        Tag = entity
+                    };
+
+                    lbl_entity.Click += (s, e) =>
+                    {
+                        if (_selectedEntityLabel != null)
+                        {
+                            _selectedEntityLabel.ForeColor = Color.Black;
+                            _selectedEntityLabel.BorderStyle = System.Windows.Forms.BorderStyle.None;
+                        }
+                        
+                        _selectedEntityLabel = lbl_entity;
+                        lbl_entity.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+                        UpdateEntityPanel(entity);
+                    };
+
+                    panel_entities.Controls.Add(lbl_entity);
+                    y += 20;
+                }
             }
         }
 
-        private void UpdateTabControl()
+        private void UpdateEntityPanel(object entity)
         {
             
+            Label lbl_name = new Label()
+            {
+                Text = "Name",
+                Location = new Point(0, 2),
+                AutoSize = true,
+            };
+            
+            TextBox txt_name = new TextBox()
+            {
+                Text = entity.GetType().GetProperty("Name").GetValue(entity).ToString(),
+                Location = new Point(45, 0),
+                
+            };
+
+            txt_name.TextChanged += (s, e) =>
+            {
+                var textBox = s as TextBox;
+                if (textBox != null && entity != null)
+                {
+                    var nameProp = entity.GetType().GetProperty("Name");
+                    if (nameProp != null && nameProp.CanWrite)
+                    {
+                        nameProp.SetValue(entity, textBox.Text);
+                        UpdateEntitiesPanel(string.Empty); 
+                    }
+                }
+            };
+
+            Label lbl_x = new Label()
+            {
+                Text = "X",
+                Location = new Point(0, lbl_name.Location.Y + 25),
+                AutoSize = true,
+            };
+
+            Vector2 position = (Vector2)entity.GetType().GetProperty("Position").GetValue(entity);
+
+            TextBox txt_x = new TextBox()
+            {
+                Text = position.X.ToString(),
+                Location = new Point(45, lbl_name.Location.Y + 25),
+            };
+          
+
+            panel_properties.Controls.Clear();
+            panel_properties.Controls.Add(lbl_name);
+            panel_properties.Controls.Add(txt_name);
+            panel_properties.Controls.Add(lbl_x);
+            panel_properties.Controls.Add(txt_x);
         }
+
+
+
+
 
         #endregion
 
-        private void list_entities_SelectedIndexChanged(object sender, EventArgs e)
+        private void txt_entitiesSearch_Enter(object sender, EventArgs e)
         {
-
+            txt_entitiesSearch.Text = string.Empty;
+            txt_entitiesSearch.ForeColor = Color.Black;
         }
+
+        private void txt_entitiesSearch_Leave(object sender, EventArgs e)
+        {
+            if (txt_entitiesSearch.Text == string.Empty)
+            {
+                txt_entitiesSearch.Text = "Search";
+                txt_entitiesSearch.ForeColor = Color.Gray;
+            }
+        }
+
+        private void txt_entitiesSearch_TextChanged(object sender, EventArgs e)
+        {
+            UpdateEntitiesPanel(txt_entitiesSearch.Text);
+        }
+
+       
     }
 }
+
+     

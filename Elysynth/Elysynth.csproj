@@ -56,7 +56,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controls\ProjectControl.cs" />
     <Compile Include="Forms\NewProjectWindow.cs">
       <SubType>Form</SubType>
     </Compile>
