@@ -28,35 +28,24 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.metroLabel1 = new MetroFramework.Controls.MetroLabel();
             this.SuspendLayout();
-            // 
-            // metroLabel1
-            // 
-            this.metroLabel1.AutoSize = true;
-            this.metroLabel1.Location = new System.Drawing.Point(23, 101);
-            this.metroLabel1.Name = "metroLabel1";
-            this.metroLabel1.Size = new System.Drawing.Size(84, 20);
-            this.metroLabel1.TabIndex = 0;
-            this.metroLabel1.Text = "metroLabel1";
             // 
             // OptionsWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BorderStyle = MetroFramework.Drawing.MetroBorderStyle.FixedSingle;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.metroLabel1);
+            this.DisplayHeader = false;
             this.Name = "OptionsWindow";
-            this.Style = MetroFramework.MetroColorStyle.White;
+            this.Padding = new System.Windows.Forms.Padding(20, 30, 20, 20);
+            this.Style = MetroFramework.MetroColorStyle.Black;
             this.Text = "Options";
             this.Load += new System.EventHandler(this.OptionsWindow_Load);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
-
-        private MetroFramework.Controls.MetroLabel metroLabel1;
     }
 }

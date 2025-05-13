@@ -25,6 +25,7 @@ namespace Elysynth
         private string _activeProjectPath;
 
         private Label _selectedEntityLabel;
+        private object _activeEntity;
 
         public MainWindow()
         {
@@ -66,7 +67,17 @@ namespace Elysynth
 
         private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            var form = new Forms.OptionsWindow(_settings);
+            form.ShowDialog();
+            if (form.DialogResult == DialogResult.OK)
+            {
+                _settings = form.settings;
+                SettingsHandler.Save(_fullPath + "settings.bin", _settings);
+            }
+            else
+            {
+                _settings = form.settings;
+            }
         }
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
@@ -135,7 +146,7 @@ namespace Elysynth
 
             if (_activeProject != null)
             {
-                int y = 10;
+                int y = 5;
 
                 foreach (var entity in _activeProject.Entities)
                 {
@@ -163,76 +174,124 @@ namespace Elysynth
                             _selectedEntityLabel.ForeColor = Color.Black;
                             _selectedEntityLabel.BorderStyle = System.Windows.Forms.BorderStyle.None;
                         }
-                        
+
+                        _activeEntity = entity;
                         _selectedEntityLabel = lbl_entity;
                         lbl_entity.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-                        UpdateEntityPanel(entity);
+                        UpdateEntityPanel(entity, string.Empty);
                     };
 
                     panel_entities.Controls.Add(lbl_entity);
-                    y += 20;
+                    y += 15;
                 }
             }
         }
 
-        private void UpdateEntityPanel(object entity)
+        private void UpdateEntityPanel(object entity, string txt_property)
         {
-            
-            Label lbl_name = new Label()
-            {
-                Text = "Name",
-                Location = new Point(0, 2),
-                AutoSize = true,
-            };
-            
-            TextBox txt_name = new TextBox()
-            {
-                Text = entity.GetType().GetProperty("Name").GetValue(entity).ToString(),
-                Location = new Point(45, 0),
-                
-            };
-
-            txt_name.TextChanged += (s, e) =>
-            {
-                var textBox = s as TextBox;
-                if (textBox != null && entity != null)
-                {
-                    var nameProp = entity.GetType().GetProperty("Name");
-                    if (nameProp != null && nameProp.CanWrite)
-                    {
-                        nameProp.SetValue(entity, textBox.Text);
-                        UpdateEntitiesPanel(string.Empty); 
-                    }
-                }
-            };
-
-            Label lbl_x = new Label()
-            {
-                Text = "X",
-                Location = new Point(0, lbl_name.Location.Y + 25),
-                AutoSize = true,
-            };
-
-            Vector2 position = (Vector2)entity.GetType().GetProperty("Position").GetValue(entity);
-
-            TextBox txt_x = new TextBox()
-            {
-                Text = position.X.ToString(),
-                Location = new Point(45, lbl_name.Location.Y + 25),
-            };
-          
-
             panel_properties.Controls.Clear();
-            panel_properties.Controls.Add(lbl_name);
-            panel_properties.Controls.Add(txt_name);
-            panel_properties.Controls.Add(lbl_x);
-            panel_properties.Controls.Add(txt_x);
+
+            if (entity == null) return;
+
+            var properties = entity.GetType().GetProperties();
+            int y = 5;
+
+            foreach (var prop in properties)
+            {
+                if (!prop.CanRead || !prop.CanWrite)
+                    continue;
+
+                if (!string.IsNullOrEmpty(txt_property) &&
+                    !prop.Name.ToLower().Contains(txt_property.ToLower()))
+                    continue;
+
+                if (prop.PropertyType != typeof(string) &&
+                    !prop.PropertyType.IsValueType &&
+                    prop.PropertyType != typeof(Vector2))
+                    continue;
+
+                Label lbl = new Label()
+                {
+                    Text = prop.Name,
+                    Location = new Point(0, y),
+                    AutoSize = true,
+                };
+
+                Control input;
+
+                if (prop.PropertyType == typeof(Vector2))
+                {
+                    Vector2 value = (Vector2)prop.GetValue(entity);
+
+                    TextBox txtX = new TextBox()
+                    {
+                        Text = value.X.ToString(),
+                        Location = new Point(65, y),
+                        Width = 40,
+                        Tag = "X"
+                    };
+
+                    TextBox txtY = new TextBox()
+                    {
+                        Text = value.Y.ToString(),
+                        Location = new Point(115, y),
+                        Width = 40,
+                        Tag = "Y"
+                    };
+
+                    txtX.TextChanged += (s, e) =>
+                    {
+                        if (float.TryParse(txtX.Text, out float newX))
+                        {
+                            value.X = newX;
+                            prop.SetValue(entity, value);
+                        }
+                    };
+
+                    txtY.TextChanged += (s, e) =>
+                    {
+                        if (float.TryParse(txtY.Text, out float newY))
+                        {
+                            value.Y = newY;
+                            prop.SetValue(entity, value);
+                        }
+                    };
+
+                    panel_properties.Controls.Add(lbl);
+                    panel_properties.Controls.Add(txtX);
+                    panel_properties.Controls.Add(txtY);
+                }
+                else
+                {
+                    input = new TextBox()
+                    {
+                        Text = prop.GetValue(entity)?.ToString(),
+                        Location = new Point(60, y),
+                        Width = 100,
+                    };
+
+                    input.TextChanged += (s, e) =>
+                    {
+                        var textBox = s as TextBox;
+                        try
+                        {
+                            object newValue = Convert.ChangeType(textBox.Text, prop.PropertyType);
+                            prop.SetValue(entity, newValue);
+                        }
+                        catch
+                        {
+                            // optional: handle conversion errors silently
+                        }
+                        UpdateEntitiesPanel(string.Empty);
+                    };
+
+                    panel_properties.Controls.Add(lbl);
+                    panel_properties.Controls.Add(input);
+                }
+
+                y += 30;
+            }
         }
-
-
-
-
-
         #endregion
 
         private void txt_entitiesSearch_Enter(object sender, EventArgs e)
@@ -248,6 +307,8 @@ namespace Elysynth
                 txt_entitiesSearch.Text = "Search";
                 txt_entitiesSearch.ForeColor = Color.Gray;
             }
+
+            UpdateEntitiesPanel(string.Empty);
         }
 
         private void txt_entitiesSearch_TextChanged(object sender, EventArgs e)
@@ -255,8 +316,30 @@ namespace Elysynth
             UpdateEntitiesPanel(txt_entitiesSearch.Text);
         }
 
-       
+        private void txt_propertySearch_TextChanged(object sender, EventArgs e)
+        {
+            UpdateEntityPanel(_activeEntity, txt_propertySearch.Text);
+        }
+
+        private void txt_propertySearch_Enter(object sender, EventArgs e)
+        {
+            txt_propertySearch.Text = string.Empty;
+            txt_propertySearch.ForeColor = Color.Black;
+        }
+
+        private void txt_propertySearch_Leave(object sender, EventArgs e)
+        {
+            if (txt_propertySearch.Text == string.Empty)
+            {
+                txt_propertySearch.ForeColor = Color.Gray;
+                txt_propertySearch.Text = "Search";
+                UpdateEntityPanel(_activeEntity, String.Empty);
+            }
+            else
+            {
+                UpdateEntityPanel(_activeEntity, txt_propertySearch.Text);
+
+            }
+        }
     }
 }
-
-     

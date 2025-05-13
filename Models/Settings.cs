@@ -9,5 +9,8 @@ namespace Models
         public string AppName { get; set; } = "Elysynth";
         public string AppVersion { get; set; } = "0.1";
         public string ProjectsDirectoryPath { get; set; }
+        public int AutoSaveInterval { get; set; } = 0;
+        public bool StartAppMinimized { get; set; } = true;
+        public int MaxFileSize { get; set; } = 1;
     }
 }
