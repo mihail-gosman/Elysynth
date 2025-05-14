@@ -27,6 +27,8 @@ namespace Elysynth
         private Label _selectedEntityLabel;
         private object _activeEntity;
 
+        Timer timer;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -41,14 +43,21 @@ namespace Elysynth
             }
 
             lbl_elysynth.Text += "  " + _settings.AppVersion;
+
+            timer = new Timer();
+            timer.Interval = 100; // 1 second
+            timer.Tick += Timer_Tick;
+            
+
+            timer.Start();
         }
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
-
+            panel_simulation.Paint += Panel_simulation_Paint;
         }
 
-        #region Menu Strip 
+        #region Menu Strip Controls
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var newProjectWindow = new NewProjectWindow();
@@ -243,8 +252,12 @@ namespace Elysynth
                     {
                         if (float.TryParse(txtX.Text, out float newX))
                         {
+                            txtX.ForeColor = Color.Black;
                             value.X = newX;
                             prop.SetValue(entity, value);
+                        }
+                        else { 
+                            txtX.ForeColor = Color.Red;
                         }
                     };
 
@@ -252,8 +265,13 @@ namespace Elysynth
                     {
                         if (float.TryParse(txtY.Text, out float newY))
                         {
+                            txtX.ForeColor = Color.Black;
                             value.Y = newY;
                             prop.SetValue(entity, value);
+                        }
+                        else
+                        {
+                            txtX.ForeColor = Color.Red;
                         }
                     };
 
@@ -294,6 +312,7 @@ namespace Elysynth
         }
         #endregion
 
+        #region Entities Panel Controls
         private void txt_entitiesSearch_Enter(object sender, EventArgs e)
         {
             txt_entitiesSearch.Text = string.Empty;
@@ -315,7 +334,9 @@ namespace Elysynth
         {
             UpdateEntitiesPanel(txt_entitiesSearch.Text);
         }
+        #endregion
 
+        #region Entity Panel Controls
         private void txt_propertySearch_TextChanged(object sender, EventArgs e)
         {
             UpdateEntityPanel(_activeEntity, txt_propertySearch.Text);
@@ -339,6 +360,45 @@ namespace Elysynth
             {
                 UpdateEntityPanel(_activeEntity, txt_propertySearch.Text);
 
+            }
+        }
+        #endregion
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            lbl_status.Text = DateTime.Now.ToString("HH:mm:ss");
+            panel_simulation.Invalidate();
+        }
+
+        private void pictureBox2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Panel_simulation_Paint(object sender, PaintEventArgs e)
+        {
+            if (_activeProject != null)
+            {
+                Draw(e.Graphics);
+            }
+        }
+
+        public void Draw(Graphics g)
+        {
+            foreach (var entity in _activeProject.Entities)
+            {
+                if (entity is Particle particle)
+                {
+                    float radius = 5f;
+                    float x = (float)particle.Position.X - radius;
+                    float y = (float)particle.Position.Y - radius;
+                    g.FillEllipse(Brushes.Red, x, y, radius * 2, radius * 2);
+                }
             }
         }
     }
