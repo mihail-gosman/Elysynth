@@ -4,12 +4,17 @@ using System.Linq;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using MetroFramework.Forms;
+using Management;
+using Models;
 
 namespace Elysynth.UI.NewProjectForm
 {
     public partial class NewProjectForm : MetroForm
     {
         private string documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+        
+        public string projectName { get; set; }
+        public string projectLocation { get; set; }
 
         public NewProjectForm()
         {
@@ -37,41 +42,54 @@ namespace Elysynth.UI.NewProjectForm
             }
         }
 
-        private void btn_create_Click(object sender, EventArgs e)
+        private void btn_cancel_Click(object sender, EventArgs e)
         {
-
+            DialogResult = DialogResult.Cancel;
         }
 
-        private bool IsFormInputValid()
+        private void btn_create_Click(object sender, EventArgs e)
         {
-            if (ValidateName() && ValidateLocation())
-                return true; 
-            else
-                return false;
+            
+            if (ValidateInput())
+            {
+                projectName = txt_name.Text;
+                projectLocation = txt_location.Text;
+                DialogResult = DialogResult.OK;
+            }
+        }
+
+        private bool ValidateInput()
+        {
+            bool nameValid = ValidateName();
+            bool locationValid = ValidateLocation();
+
+            return nameValid && locationValid;
         }
 
         private bool ValidateName()
         {
-            if (!string.IsNullOrEmpty(txt_name.Text))
+            lbl_invalidName.Visible = true;
+
+            if (string.IsNullOrEmpty(txt_name.Text))
             {
-                char[] invalidChars = Path.GetInvalidFileNameChars();
-                foreach (char c in invalidChars)
-                {
-                    if (txt_name.Text.Contains(c))
-                    {
-                        lbl_invalidName.Visible = true;
-                        txt_name.Focus();
-                        return false;
-                    }
-                }
-                return true;
+                return false;
             }
 
-            return false;
+            lbl_invalidName.Visible = false;
+            return true;
         }
 
         private bool ValidateLocation()
         {
+            lbl_invalidLocation.Visible = true;
+
+            if (string.IsNullOrEmpty(txt_location.Text))
+            {
+
+                return false;
+            }
+
+            lbl_invalidLocation.Visible = false;
             return true;
         }
     }

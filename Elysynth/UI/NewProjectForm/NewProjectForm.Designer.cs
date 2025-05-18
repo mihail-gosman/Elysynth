@@ -94,7 +94,6 @@
             // btn_create
             // 
             this.btn_create.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btn_create.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.btn_create.Location = new System.Drawing.Point(230, 259);
             this.btn_create.Name = "btn_create";
             this.btn_create.Size = new System.Drawing.Size(63, 23);
@@ -105,12 +104,12 @@
             // btn_cancel
             // 
             this.btn_cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btn_cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btn_cancel.Location = new System.Drawing.Point(299, 259);
             this.btn_cancel.Name = "btn_cancel";
             this.btn_cancel.Size = new System.Drawing.Size(63, 23);
             this.btn_cancel.TabIndex = 7;
             this.btn_cancel.Text = "Cancel";
+            this.btn_cancel.Click += new System.EventHandler(this.btn_cancel_Click);
             // 
             // lbl_invalidLocation
             // 
@@ -118,18 +117,16 @@
             this.lbl_invalidLocation.ForeColor = System.Drawing.Color.IndianRed;
             this.lbl_invalidLocation.Location = new System.Drawing.Point(23, 224);
             this.lbl_invalidLocation.Name = "lbl_invalidLocation";
-            this.lbl_invalidLocation.Size = new System.Drawing.Size(86, 16);
+            this.lbl_invalidLocation.Size = new System.Drawing.Size(99, 16);
             this.lbl_invalidLocation.TabIndex = 8;
-            this.lbl_invalidLocation.Text = "Invalid name!";
+            this.lbl_invalidLocation.Text = "Invalid location!";
             this.lbl_invalidLocation.Visible = false;
             // 
             // NewProjectForm
             // 
-            this.AcceptButton = this.btn_create;
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BorderStyle = MetroFramework.Drawing.MetroBorderStyle.FixedSingle;
-            this.CancelButton = this.btn_cancel;
             this.ClientSize = new System.Drawing.Size(387, 294);
             this.Controls.Add(this.lbl_invalidLocation);
             this.Controls.Add(this.btn_cancel);
@@ -140,7 +137,7 @@
             this.Controls.Add(this.lbl_invalidName);
             this.Controls.Add(this.lbl_location);
             this.Controls.Add(this.lbl_name);
-            this.Name = "NewProjectForm";
+            this.projectName = "NewProjectForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Style = MetroFramework.MetroColorStyle.Black;
             this.Text = "Create a new project";

@@ -20,6 +20,11 @@ namespace Elysynth.UI.MainForm
         private string exeDirectory = Path.GetDirectoryName(Application.ExecutablePath);
 
         Settings userSettings;
+        Project activeProject;
+
+        string activeProjectPath;
+
+        object selectedEntity;
 
         public MainForm()
         {
@@ -43,13 +48,27 @@ namespace Elysynth.UI.MainForm
             var form = new NewProjectForm.NewProjectForm();
             if(form.ShowDialog() == DialogResult.OK)
             {
-
+                activeProject = new Project();
+                activeProject.Name = form.projectName;
+                activeProjectPath = Path.Combine(form.projectLocation, activeProject.Name + ".ely");
+                ProjectHandler.Save(activeProjectPath, activeProject);
             }
         }
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            var openFileDialog = new OpenFileDialog();
+            openFileDialog.Title = "Select a file";
+            openFileDialog.Filter = "ELY files (*.ely)|*.ely|All files (*.*)|*.*";
+            openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                string selectedFilePath = openFileDialog.FileName;
+                activeProjectPath = selectedFilePath;
+                activeProject = ProjectHandler.Load(activeProjectPath);
+            }
+            UpdateEntitiesPanel();
         }
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
@@ -66,7 +85,5 @@ namespace Elysynth.UI.MainForm
         {
 
         }
-
-       
     }
 }

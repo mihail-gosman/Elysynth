@@ -64,7 +64,12 @@
     <Compile Include="UI\MainForm\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\MainForm\MainTabs\EntitiesTab.cs" />
+    <Compile Include="UI\MainForm\MainTabs\EntityTab.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\MainForm\MainTabs\EntitiesTab.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="UI\NewProjectForm\NewProjectForm.cs">
       <SubType>Form</SubType>
     </Compile>
