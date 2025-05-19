@@ -52,6 +52,9 @@ namespace Elysynth.UI.MainForm
                 activeProject.Name = form.projectName;
                 activeProjectPath = Path.Combine(form.projectLocation, activeProject.Name + ".ely");
                 ProjectHandler.Save(activeProjectPath, activeProject);
+                saveToolStripMenuItem.Enabled = true;
+                saveAsToolStripMenuItem.Enabled = true;
+                projectToolStripMenuItem.Enabled = true;
             }
         }
 
@@ -67,18 +70,33 @@ namespace Elysynth.UI.MainForm
                 string selectedFilePath = openFileDialog.FileName;
                 activeProjectPath = selectedFilePath;
                 activeProject = ProjectHandler.Load(activeProjectPath);
+                saveToolStripMenuItem.Enabled = true;
+                saveAsToolStripMenuItem.Enabled = true;
+                projectToolStripMenuItem.Enabled = true;
             }
+
             UpdateEntitiesPanel();
         }
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            ProjectHandler.Save(activeProjectPath, activeProject);
         }
 
         private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            var form = new SaveFileDialog();
+            form.Title = "Save Project As";
+            form.Filter = "Elysynth Project (*.ely)|*.ely";
+            form.DefaultExt = "ely";
+            form.AddExtension = true;
 
+
+            if (form.ShowDialog() == DialogResult.OK)
+            {
+                MessageBox.Show(form.FileName);
+                ProjectHandler.Save(form.FileName, activeProject);
+            }
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
