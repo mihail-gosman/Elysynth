@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Models;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -9,97 +10,81 @@ using System.Windows.Forms;
 namespace Elysynth.UI.MainForm
 {
     public partial class MainForm
-    {
-        private void UpdateEntityTab(object entity, int indent = 0)
+    { 
+        private void UpdateEntityTab(object entity)
         {
-            if (indent == 0)
-                panelEntity.Controls.Clear();
+            int xOffset = 10;
+            int yOffset = 10;
 
-            if (entity == null)
-                return;
+            panelEntity.Controls.Clear();
 
-            int yOffset = panelEntity.Controls.Count > 0
-                ? panelEntity.Controls[panelEntity.Controls.Count - 1].Bottom + 5
-                : 10;
-
-            int labelWidth = 100;
-            int controlWidth = panelEntity.Width - labelWidth - 30;
-
-            var props = entity.GetType().GetProperties();
-
-            foreach (var prop in props)
+            if (entity is Particle)
             {
-                Label lbl = new Label
+                Label lbl_name = new Label()
                 {
-                    Text = prop.Name,
-                    Location = new Point(10 + indent, yOffset),
-                    AutoSize = true
+                    Text = "Name",
+                    Location = new Point(xOffset, yOffset),
+                    Size = new Size(50, 20),
+                    ForeColor = Color.Black,
                 };
-                panelEntity.Controls.Add(lbl);
 
-                object value = prop.GetValue(entity);
-                Control inputControl = null;
-
-                if (prop.PropertyType == typeof(bool))
+                TextBox txt_name = new TextBox()
                 {
-                    var chk = new CheckBox
-                    {
-                        Checked = value is bool b && b,
-                        Location = new Point(labelWidth + 10 + indent, yOffset - 3),
-                        Width = controlWidth
-                    };
+                    Location = new Point(xOffset + 50 + 10, yOffset - 2),
+                    Text = ((Particle)entity).Name,
+                    Size = new Size(60, 20),
+                    ForeColor = Color.Black,
+                };
 
-                    chk.CheckedChanged += (s, e) =>
-                    {
-                        prop.SetValue(entity, chk.Checked);
-                    };
-
-                    inputControl = chk;
-                }
-                else if (prop.PropertyType.IsPrimitive || prop.PropertyType == typeof(string) || prop.PropertyType == typeof(decimal) || prop.PropertyType == typeof(double) || prop.PropertyType == typeof(float))
+                txt_name.TextChanged += (s, e) =>
                 {
-                    var txt = new TextBox
+                    if (txt_name.Text.Length > 0)
                     {
-                        Text = value?.ToString() ?? "",
-                        Location = new Point(labelWidth + 10 + indent, yOffset),
-                        Width = controlWidth
-                    };
-
-                    txt.TextChanged += (s, e) =>
+                       lbl_name.BackColor = Color.White;
+                        ((Particle)entity).Name = txt_name.Text;
+                    }
+                    else
                     {
-                        // Try convert and set value
-                        try
-                        {
-                            object convertedValue = Convert.ChangeType(txt.Text, prop.PropertyType);
-                            prop.SetValue(entity, convertedValue);
-                        }
-                        catch
-                        {
-                            // Optionally: handle conversion errors or ignore
-                        }
+                        lbl_name.ForeColor = Color.Red;
+                    }
                         UpdateEntitiesPanel();
-                    };
+                };
 
-                    inputControl = txt;
-                }
-                else if (value != null)
+                yOffset += 30;
+                Label lbl_posX = new Label()
                 {
-                    // Complex type — recurse with indent
-                    yOffset += 25;
-                    UpdateEntityTab(value, indent + 20);
-                    continue;
-                }
+                    Text = "Position X",
+                    Location = new Point(xOffset, yOffset),
+                    Size = new Size(50, 20),
+                    ForeColor = Color.Black,
+                };
 
-                if (inputControl != null)
+                TextBox txt_posY = new TextBox()
                 {
-                    inputControl.Tag = prop;
-                    panelEntity.Controls.Add(inputControl);
-                    yOffset += 30;
-                }
-                else
+                    Location = new Point(xOffset + 50 + 10, yOffset - 2),
+                    Text = ((Particle)entity).Name,
+                    Size = new Size(60, 20),
+                    ForeColor = Color.Black,
+                };
+
+                txt_name.TextChanged += (s, e) =>
                 {
-                    yOffset += 25;
-                }
+                    if (txt_name.Text.Length > 0)
+                    {
+                        lbl_name.BackColor = Color.White;
+                        ((Particle)entity).Name = txt_name.Text;
+                    }
+                    else
+                    {
+                        lbl_name.ForeColor = Color.Red;
+                    }
+                    UpdateEntitiesPanel();
+                };
+
+                panelEntity.Controls.Add(lbl_name);
+                panelEntity.Controls.Add(txt_name);
+                panelEntity.Controls.Add(lbl_posX);
+                panelEntity.Controls.Add(txt_posY);
             }
         }
 
