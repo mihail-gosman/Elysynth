@@ -10,30 +10,33 @@ namespace Elysynth.UI.MainForm
 {
     public partial class MainForm
     {
-        private void UpdateEntitiesPanel()
+        private void UpdateEntitiesPanel(string keyword = null)
         {
             panelEntities.Controls.Clear();
 
             if (activeProject == null || activeProject.Entities == null)
                 return;
 
-            int yOffset = 10;
+            int yOffset = 5;
 
             foreach (var entity in activeProject.Entities)
             {
-                if (entity == null) continue;
-
                 var nameProp = entity.GetType().GetProperty("Name");
                 if (nameProp == null) continue;
 
                 string name = nameProp.GetValue(entity)?.ToString() ?? "Unnamed";
+
+                if (keyword != null && !name.Contains(keyword))
+                {
+                    continue;
+                }
 
                 Label label = new Label
                 {
                     Text = name,
                     AutoSize = false,
                     Width = panelEntities.Width - 20,
-                    Height = 30,
+                    Height = 20,
                     Location = new Point(10, yOffset),
                     BackColor = Color.Transparent,
                     ForeColor = Color.Black,
@@ -54,7 +57,7 @@ namespace Elysynth.UI.MainForm
                     // Highlight selected label
                     label.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
                     selectedEntity = label.Tag;
-                    
+
                     UpdateEntityTab(selectedEntity);
                 };
 
@@ -62,5 +65,43 @@ namespace Elysynth.UI.MainForm
                 yOffset += label.Height + 5;
             }
         }
+
+        private void txt_entities_Enter(object sender, EventArgs e)
+        {
+            if (txt_entities.Text == "Search...")
+            {
+                txt_entities.Text = "";
+                txt_entities.ForeColor = Color.Black;
+            }
+
+        }
+
+        private void txt_entities_Leave(object sender, EventArgs e)
+        {
+            if (txt_entities.Text.Length == 0)
+            {
+                txt_entities.ForeColor = Color.Gray;
+                txt_entities.Text = "Search...";
+                UpdateEntitiesPanel(null); // <- Fix: show all when empty
+            }
+            else
+            {
+                txt_entities.ForeColor = Color.Black;
+                UpdateEntitiesPanel(txt_entities.Text);
+            }
+        }
+
+        private void txt_entities_TextChanged(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrWhiteSpace(txt_entities.Text) && txt_entities.Text != "Search...")
+            {
+                UpdateEntitiesPanel(txt_entities.Text);
+            }
+            else
+            {
+                UpdateEntitiesPanel(null); // <- Fix: show all if empty or placeholder
+            }
+        }
+
     }
 }

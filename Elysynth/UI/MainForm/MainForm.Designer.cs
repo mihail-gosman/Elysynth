@@ -249,9 +249,9 @@
             // 
             this.panelEntities.AutoScroll = true;
             this.panelEntities.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelEntities.Location = new System.Drawing.Point(0, 31);
+            this.panelEntities.Location = new System.Drawing.Point(0, 27);
             this.panelEntities.Name = "panelEntities";
-            this.panelEntities.Size = new System.Drawing.Size(374, 170);
+            this.panelEntities.Size = new System.Drawing.Size(374, 174);
             this.panelEntities.TabIndex = 1;
             // 
             // toolStripEntities
@@ -264,28 +264,31 @@
             this.txt_entities});
             this.toolStripEntities.Location = new System.Drawing.Point(0, 0);
             this.toolStripEntities.Name = "toolStripEntities";
-            this.toolStripEntities.Size = new System.Drawing.Size(374, 31);
+            this.toolStripEntities.Size = new System.Drawing.Size(374, 27);
             this.toolStripEntities.TabIndex = 0;
             this.toolStripEntities.Text = "toolStripEntities";
             // 
             // toolStripLabel1
             // 
             this.toolStripLabel1.Name = "toolStripLabel1";
-            this.toolStripLabel1.Size = new System.Drawing.Size(57, 28);
+            this.toolStripLabel1.Size = new System.Drawing.Size(57, 24);
             this.toolStripLabel1.Text = "Entities";
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 31);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 27);
             // 
             // txt_entities
             // 
             this.txt_entities.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.txt_entities.ForeColor = System.Drawing.SystemColors.GrayText;
             this.txt_entities.Name = "txt_entities";
-            this.txt_entities.Size = new System.Drawing.Size(70, 31);
+            this.txt_entities.Size = new System.Drawing.Size(70, 27);
             this.txt_entities.Text = "Search...";
+            this.txt_entities.Enter += new System.EventHandler(this.txt_entities_Enter);
+            this.txt_entities.Leave += new System.EventHandler(this.txt_entities_Leave);
+            this.txt_entities.TextChanged += new System.EventHandler(this.txt_entities_TextChanged);
             // 
             // panel_entity
             // 
@@ -301,9 +304,9 @@
             // 
             this.panelEntity.AutoScroll = true;
             this.panelEntity.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelEntity.Location = new System.Drawing.Point(0, 31);
+            this.panelEntity.Location = new System.Drawing.Point(0, 27);
             this.panelEntity.Name = "panelEntity";
-            this.panelEntity.Size = new System.Drawing.Size(374, 166);
+            this.panelEntity.Size = new System.Drawing.Size(374, 170);
             this.panelEntity.TabIndex = 1;
             // 
             // toolStrip1
@@ -316,27 +319,27 @@
             this.toolStripTextBox1});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(374, 31);
+            this.toolStrip1.Size = new System.Drawing.Size(374, 27);
             this.toolStrip1.TabIndex = 0;
             this.toolStrip1.Text = "toolStrip1";
             // 
             // toolStripLabel2
             // 
             this.toolStripLabel2.Name = "toolStripLabel2";
-            this.toolStripLabel2.Size = new System.Drawing.Size(80, 28);
+            this.toolStripLabel2.Size = new System.Drawing.Size(80, 24);
             this.toolStripLabel2.Text = "Proprieties";
             // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 31);
+            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 27);
             // 
             // toolStripTextBox1
             // 
             this.toolStripTextBox1.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.toolStripTextBox1.ForeColor = System.Drawing.SystemColors.GrayText;
             this.toolStripTextBox1.Name = "toolStripTextBox1";
-            this.toolStripTextBox1.Size = new System.Drawing.Size(70, 31);
+            this.toolStripTextBox1.Size = new System.Drawing.Size(70, 27);
             this.toolStripTextBox1.Text = "Search...";
             // 
             // lbl_title
