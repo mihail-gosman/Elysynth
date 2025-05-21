@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using MetroFramework.Forms;
 using Models;
 using Management;
+using Engine;
 
 namespace Elysynth.UI.MainForm
 {
@@ -21,10 +22,14 @@ namespace Elysynth.UI.MainForm
 
         Settings userSettings;
         Project activeProject;
+        Project activeProjectCopy;
+        Simulation simulation;
 
         string activeProjectPath;
 
         object selectedEntity;
+
+        Timer timer = new Timer();
 
         public MainForm()
         {
@@ -35,6 +40,12 @@ namespace Elysynth.UI.MainForm
                 userSettings = new Settings();
                 Management.SettingsHandler.Save(Path.Combine(exeDirectory, "settings.bin"), userSettings);
             }
+
+            panelSimulation.Paint += PanelSimulationPaint;
+           
+
+            timer.Interval = 1000 / 60;
+            timer.Tick += UpdateSimulation;
 
         }
 
@@ -52,6 +63,9 @@ namespace Elysynth.UI.MainForm
                 activeProject.Name = form.projectName;
                 activeProjectPath = Path.Combine(form.projectLocation, activeProject.Name + ".ely");
                 ProjectHandler.Save(activeProjectPath, activeProject);
+
+                UpdateSimulationPanel();
+
                 saveToolStripMenuItem.Enabled = true;
                 saveAsToolStripMenuItem.Enabled = true;
                 projectToolStripMenuItem.Enabled = true;
@@ -75,6 +89,7 @@ namespace Elysynth.UI.MainForm
                 projectToolStripMenuItem.Enabled = true;
             }
 
+            UpdateSimulationPanel();
             UpdateEntitiesPanel();
         }
 
@@ -99,10 +114,26 @@ namespace Elysynth.UI.MainForm
             }
         }
 
+        
+
+        private void startToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            activeProjectCopy = Cloner.DeepClone(activeProject);
+            simulation = new Simulation(activeProject);
+            UpdateEntityTab(null);
+            timer.Start();
+        }
+
+        private void stopToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            timer.Stop();
+            activeProject = Cloner.DeepClone(activeProjectCopy);
+            UpdateSimulationPanel();
+        }
+
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
         }
-
     }
 }

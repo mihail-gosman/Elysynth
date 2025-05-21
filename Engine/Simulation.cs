@@ -14,7 +14,7 @@ namespace Engine
         
         public Simulation() { }
 
-        public Simulation(Panel panel, Project project)
+        public Simulation(Project project)
         {
             ActiveProject = project;
         }
