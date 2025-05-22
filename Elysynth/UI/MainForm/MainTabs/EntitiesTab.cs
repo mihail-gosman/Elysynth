@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Elysynth.UI.MainForm
@@ -45,7 +41,7 @@ namespace Elysynth.UI.MainForm
                     BorderStyle = System.Windows.Forms.BorderStyle.None
                 };
 
-                label.Click += (s, e) =>
+                label.MouseClick += (s, e) =>
                 {
                     // Clear borders from all labels
                     foreach (Control ctrl in panelEntities.Controls)
@@ -56,10 +52,23 @@ namespace Elysynth.UI.MainForm
 
                     // Highlight selected label
                     label.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-                    selectedEntity = label.Tag;
 
+                    if (e.Button == MouseButtons.Left)
+                    {
+
+
+
+                        selectedEntity = label.Tag;
+                    }
+                    else if (e.Button == MouseButtons.Right)
+                    {
+                        selectedEntity = label.Tag;
+                        contextEntities.Show(label, new Point(0, label.Height));
+                    }
                     UpdateEntityTab(selectedEntity);
                 };
+
+
 
                 panelEntities.Controls.Add(label);
                 yOffset += label.Height + 5;
@@ -101,6 +110,15 @@ namespace Elysynth.UI.MainForm
             {
                 UpdateEntitiesPanel(null); // <- Fix: show all if empty or placeholder
             }
+        }
+
+        private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (selectedEntity == null) return;
+
+            activeProject.Entities.Remove(selectedEntity);
+            UpdateEntitiesPanel(null);
+            UpdateSimulationPanel();
         }
 
     }

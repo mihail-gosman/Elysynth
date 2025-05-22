@@ -17,5 +17,31 @@ namespace Management
         {
             Core.Utilities.Serializer.Instance.Write(path, project);
         }
+
+        public static void AddParticle(Project project)
+        {
+            var particle = new Models.Particle
+            {
+                Name = "Particle" + (project.Entities.Count + 1),
+                Position = new Vector2(0, 0),
+                Velocity = new Vector2(0, 0),
+                Acceleration = new Vector2(0, 0),
+                Mass = 1,
+                Charge = 1
+
+            };
+            project.Entities.Add(particle);
+        }
+
+        public static void AddField(Project project)
+        {
+            var field = new Models.Field
+            {
+                Name = "Field" + (project.Entities.Count + 1),
+                Position = new Vector2(0, 0),
+                Charge = 1,
+            };
+            project.Entities.Add(field);
+        }
     }
 }

@@ -1,21 +1,14 @@
-﻿using System;
-using System.IO;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using Engine;
+using Management;
 using MetroFramework.Forms;
 using Models;
-using Management;
-using Engine;
+using System;
+using System.IO;
+using System.Windows.Forms;
 
 namespace Elysynth.UI.MainForm
 {
-    public partial class MainForm: MetroForm
+    public partial class MainForm : MetroForm
     {
 
         private string exeDirectory = Path.GetDirectoryName(Application.ExecutablePath);
@@ -31,6 +24,10 @@ namespace Elysynth.UI.MainForm
 
         Timer timer = new Timer();
 
+        FastPanel panelSimulation = new FastPanel();
+
+        bool isSimulationRunning = false;
+
         public MainForm()
         {
             InitializeComponent();
@@ -42,7 +39,8 @@ namespace Elysynth.UI.MainForm
             }
 
             panelSimulation.Paint += PanelSimulationPaint;
-           
+            panelSimulation.Dock = DockStyle.Fill;
+            splitContainer2.Panel1.Controls.Add(panelSimulation);
 
             timer.Interval = 1000 / 60;
             timer.Tick += UpdateSimulation;
@@ -57,7 +55,7 @@ namespace Elysynth.UI.MainForm
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var form = new NewProjectForm.NewProjectForm();
-            if(form.ShowDialog() == DialogResult.OK)
+            if (form.ShowDialog() == DialogResult.OK)
             {
                 activeProject = new Project();
                 activeProject.Name = form.projectName;
@@ -95,6 +93,11 @@ namespace Elysynth.UI.MainForm
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if(activeProject == null)
+            {
+                MessageBox.Show("No project loaded.");
+                return;
+            }
             ProjectHandler.Save(activeProjectPath, activeProject);
         }
 
@@ -114,26 +117,58 @@ namespace Elysynth.UI.MainForm
             }
         }
 
-        
+
 
         private void startToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            activeProjectCopy = Cloner.DeepClone(activeProject);
-            simulation = new Simulation(activeProject);
-            UpdateEntityTab(null);
-            timer.Start();
+            if (activeProject != null)
+            {
+                activeProjectCopy = Cloner.DeepClone(activeProject);
+                simulation = new Simulation(activeProjectCopy);
+                UpdateEntityTab(null);
+                timer.Start();
+                isSimulationRunning = true;
+                lbl_status.Text = "Running";
+
+            }
         }
 
         private void stopToolStripMenuItem_Click(object sender, EventArgs e)
         {
             timer.Stop();
-            activeProject = Cloner.DeepClone(activeProjectCopy);
+            isSimulationRunning = false;
             UpdateSimulationPanel();
+            lbl_status.Text = "Stopped";
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void particleToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ProjectHandler.AddParticle(activeProject);
+            UpdateEntitiesPanel(null);
+            UpdateSimulationPanel();
+        }
+
+        private void fieldToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ProjectHandler.AddField(activeProject);
+            UpdateEntitiesPanel(null);
+            UpdateSimulationPanel();
+        }
+
+        private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void helpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var form = new HelpForm();
+            form.ShowDialog();
         }
     }
 }

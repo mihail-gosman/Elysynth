@@ -13,6 +13,14 @@ namespace Models
             X = x; Y = y;
         }
 
+        public double MagnitudeSquared() => X * X + Y * Y;
+
+        public Vector2 Normalized()
+        {
+            double mag = Math.Sqrt(MagnitudeSquared());
+            return mag < 1e-8 ? new Vector2(0, 0) : new Vector2(X / mag, Y / mag);
+        }
+
         public static Vector2 operator +(Vector2 a, Vector2 b)
         {
             return new Vector2(a.X + b.X, a.Y + b.Y);

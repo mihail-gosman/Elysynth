@@ -56,6 +56,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="UI\NewProjectForm\HelpForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\NewProjectForm\HelpForm.Designer.cs">
+      <DependentUpon>HelpForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\NewProjectForm\OptionsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\NewProjectForm\OptionsForm.Designer.cs">
+      <DependentUpon>OptionsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UI\MainForm\MainForm.cs">
@@ -63,6 +75,9 @@
     </Compile>
     <Compile Include="UI\MainForm\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\MainForm\MainTabs\ToolStripTab.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="UI\MainForm\MainTabs\SimulationTab.cs">
       <SubType>Form</SubType>
@@ -90,6 +105,9 @@
     </Compile>
     <EmbeddedResource Include="UI\MainForm\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\NewProjectForm\HelpForm.resx">
+      <DependentUpon>HelpForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\NewProjectForm\NewProjectForm.resx">
       <DependentUpon>NewProjectForm.cs</DependentUpon>

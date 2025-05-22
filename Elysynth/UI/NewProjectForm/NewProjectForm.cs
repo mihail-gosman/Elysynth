@@ -1,18 +1,13 @@
-﻿using System;
-using System.IO;
-using System.Linq;
+﻿using MetroFramework.Forms;
+using System;
 using System.Windows.Forms;
-using System.Xml.Linq;
-using MetroFramework.Forms;
-using Management;
-using Models;
 
 namespace Elysynth.UI.NewProjectForm
 {
     public partial class NewProjectForm : MetroForm
     {
         private string documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-        
+
         public string projectName { get; set; }
         public string projectLocation { get; set; }
 
@@ -49,7 +44,7 @@ namespace Elysynth.UI.NewProjectForm
 
         private void btn_create_Click(object sender, EventArgs e)
         {
-            
+
             if (ValidateInput())
             {
                 projectName = txt_name.Text;
