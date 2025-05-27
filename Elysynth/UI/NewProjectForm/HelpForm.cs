@@ -33,7 +33,7 @@ namespace Elysynth
         {
             System.Diagnostics.Process.Start(new ProcessStartInfo
             {
-                FileName = "https://github.com/yourusername/elysynth-docs",
+                FileName = "https://github.com/mihail-gosman/Elysynth/blob/main/docs/Documentation.pdf",
                 UseShellExecute = true
             });
         }

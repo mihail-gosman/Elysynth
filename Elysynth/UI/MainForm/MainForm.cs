@@ -22,7 +22,7 @@ namespace Elysynth.UI.MainForm
 
         object selectedEntity;
 
-        Timer timer = new Timer();
+        Timer timer = new Timer(); 
 
         FastPanel panelSimulation = new FastPanel();
 
@@ -31,7 +31,8 @@ namespace Elysynth.UI.MainForm
         public MainForm()
         {
             InitializeComponent();
-            userSettings = Management.SettingsHandler.Load(exeDirectory + "settings.bin");
+            userSettings = Management.SettingsHandler.Load(exeDirectory + "\\settings.bin");
+            
             if (userSettings == null)
             {
                 userSettings = new Settings();
@@ -112,7 +113,6 @@ namespace Elysynth.UI.MainForm
 
             if (form.ShowDialog() == DialogResult.OK)
             {
-                MessageBox.Show(form.FileName);
                 ProjectHandler.Save(form.FileName, activeProject);
             }
         }
@@ -143,32 +143,44 @@ namespace Elysynth.UI.MainForm
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            Application.Exit() ;
         }
 
         private void particleToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ProjectHandler.AddParticle(activeProject);
+            selectedEntity = ProjectHandler.AddParticle(activeProject);
             UpdateEntitiesPanel(null);
             UpdateSimulationPanel();
+            UpdateEntityTab(selectedEntity);
         }
 
         private void fieldToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ProjectHandler.AddField(activeProject);
+            selectedEntity = ProjectHandler.AddField(activeProject);
             UpdateEntitiesPanel(null);
             UpdateSimulationPanel();
+            UpdateEntityTab(selectedEntity);
         }
 
         private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            var form = new OptionsForm(userSettings);
+            if (form.ShowDialog() == DialogResult.OK)
+            {
+                
+                Management.SettingsHandler.Save(Path.Combine(exeDirectory, "settings.bin"), userSettings);
+            }
         }
 
         private void helpToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var form = new HelpForm();
             form.ShowDialog();
+        }
+
+        private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+
         }
     }
 }
