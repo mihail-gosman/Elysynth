@@ -8,7 +8,7 @@ namespace Engine
 {
     public class Simulation
     {
-        public double DeltaTime { get; set; } = 0.01; // Adjust as needed for visible motion
+        public double DeltaTime { get; set; } = 0.01;
         public bool IsRunning = false;
         public Project ActiveProject { get; set; }
 
@@ -21,9 +21,8 @@ namespace Engine
 
         public void Update()
         {
-            const double k = 8.99e9; // Coulomb's constant
-
-            // Reset all accelerations of particles
+            const double k = 8.99e9;
+            
             foreach (var entity in ActiveProject.Entities)
             {
                 if (entity is Particle p)
@@ -32,14 +31,13 @@ namespace Engine
                 }
             }
 
-            // Compute forces for each Particle due to every other entity (Particle or Field)
             for (int i = 0; i < ActiveProject.Entities.Count; i++)
             {
                 if (!(ActiveProject.Entities[i] is Particle pi)) continue;
 
                 for (int j = 0; j < ActiveProject.Entities.Count; j++)
                 {
-                    if (i == j) continue; // Skip self-force
+                    if (i == j) continue;
 
                     var ej = ActiveProject.Entities[j];
 
@@ -60,7 +58,7 @@ namespace Engine
                         Vector2 force = direction * forceMag * sign;
 
                         pi.Acceleration += force / pi.Mass;
-                        // Apply opposite force on pj for Newton's third law
+                        
                         pj.Acceleration -= force / pj.Mass;
                     }
                     else if (ej is Field f)
@@ -75,23 +73,17 @@ namespace Engine
                         double sign = Math.Sign(pi.Charge * f.Charge);
 
                         Vector2 force = direction * forceMag * -sign;
-
-                        // Field doesn't move, only particle is affected
                         pi.Acceleration += force / pi.Mass;
                     }
                 }
             }
 
-            // Update velocities and positions of particles only
             foreach (var entity in ActiveProject.Entities)
             {
                 if (entity is Particle p)
                 {
                     p.Velocity += p.Acceleration * DeltaTime;
                     p.Position += p.Velocity * DeltaTime;
-
-                    // Optional damping
-                    // p.Velocity *= 0.99;
                 }
             }
         }
